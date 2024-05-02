@@ -46,7 +46,7 @@ const AuthenticateUser = () => {
 
             // Fetch and update the job status
             const response = await fetch(
-                `http://localhost:5555/access/login`,
+                `https://user-credential-manager-backend.onrender.com/access/login`,
                 requestOptions
             );
 
@@ -117,7 +117,7 @@ const AuthenticateUser = () => {
 
             // Fetch and update the job status
             const response = await fetch(
-                `http://localhost:5555/access/register`,
+                `https://user-credential-manager-backend.onrender.com/access/register`,
                 requestOptions
             );
 
@@ -155,7 +155,9 @@ const AuthenticateUser = () => {
     const getDivisions = async () => {
         try {
             // Fetch data from the specified endpoint using the provided token and user agent
-            const response = await fetch(`http://localhost:5555/divisions`);
+            const response = await fetch(
+                `https://user-credential-manager-backend.onrender.com/divisions`
+            );
 
             // Throw an error if the response is not successful
             if (!response.ok) {

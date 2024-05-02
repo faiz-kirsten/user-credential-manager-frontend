@@ -26,7 +26,7 @@ const Home = () => {
         try {
             // Fetch data from the specified endpoint using the provided token and user agent
             const response = await fetch(
-                `http://localhost:5555/divisions/division/credential-repo`,
+                `https://user-credential-manager-backend.onrender.com/divisions/division/credential-repo`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
@@ -58,7 +58,9 @@ const Home = () => {
         setLoading(true);
         try {
             // Fetch data from the specified endpoint using the provided token and user agent
-            const response = await fetch(`http://localhost:5555/users`);
+            const response = await fetch(
+                `https://user-credential-manager-backend.onrender.com/users`
+            );
 
             // Throw an error if the response is not successful
             if (!response.ok) {
@@ -138,7 +140,7 @@ const Home = () => {
 
             // Make a POST request to the server's registration endpoint
             const response = await fetch(
-                `http://localhost:5555/divisions/division/credential-repo/credential/add`,
+                `https://user-credential-manager-backend.onrender.com/divisions/division/credential-repo/credential/add`,
                 requestOptions
             );
 
@@ -214,7 +216,7 @@ const Home = () => {
 
             // Fetch and update the job on the server
             const response = await fetch(
-                `http://localhost:5555/divisions/division/credential-repo/credential/${editCredentialId}/update`,
+                `https://user-credential-manager-backend.onrender.com/divisions/division/credential-repo/credential/${editCredentialId}/update`,
                 requestOptions
             );
 
@@ -271,7 +273,7 @@ const Home = () => {
 
             // Fetch and update the user's role on the server
             const response = await fetch(
-                `http://localhost:5555/users/user/${editUserId}/role/update/`,
+                `https://user-credential-manager-backend.onrender.com/users/user/${editUserId}/role/update/`,
                 requestOptions
             );
 
@@ -330,7 +332,7 @@ const Home = () => {
 
             // Fetch and update the user's division on the server
             const response = await fetch(
-                `http://localhost:5555/users/user/${editUserId}/division/update`,
+                `https://user-credential-manager-backend.onrender.com/users/user/${editUserId}/division/update`,
                 requestOptions
             );
 
@@ -349,7 +351,9 @@ const Home = () => {
     const getDivisions = async () => {
         try {
             // Fetch data from the specified endpoint using the provided token and user agent
-            const response = await fetch(`http://localhost:5555/divisions`);
+            const response = await fetch(
+                `https://user-credential-manager-backend.onrender.com/divisions`
+            );
 
             // Throw an error if the response is not successful
             if (!response.ok) {
