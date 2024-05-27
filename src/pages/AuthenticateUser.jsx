@@ -185,7 +185,7 @@ const AuthenticateUser = () => {
                 <Loading />
             ) : (
                 <>
-                    {/* <div className="demo-users-container">
+                    <div className="demo-users-container">
                         <h3 className="authenticate-heading">Demo Users</h3>
                         <table className="demo-users">
                             <thead>
@@ -211,19 +211,9 @@ const AuthenticateUser = () => {
                                     <td>123</td>
                                     <td>management</td>
                                 </tr>
-                                <tr>
-                                    <td>Peterson257</td>
-                                    <td>123</td>
-                                    <td>normal</td>
-                                </tr>
-                                <tr>
-                                    <td>Peter276</td>
-                                    <td>123</td>
-                                    <td>admin</td>
-                                </tr>
                             </tbody>
                         </table>
-                    </div> */}
+                    </div>
                     <h2 className="authenticate-heading">Login</h2>
                     <form className="form-container" onSubmit={handleLogin}>
                         <div className="form-controllers">
