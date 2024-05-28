@@ -292,7 +292,7 @@ h4 {
 
 /* credential repo users */
 .user-table {
-    max-width: 1200px;
+    width: min(90%, 75em);
     margin: 0 auto;
     border-collapse: collapse;
     margin-top: 20px;
