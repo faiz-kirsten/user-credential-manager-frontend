@@ -2,6 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
+let API_URL = process.env.REACT_APP_API_URL;
+API_URL = process.env.REACT_APP_LOCAL_API_URL;
 
 // show the user the credential repo they are part of
 const AuthenticateUser = () => {
@@ -46,7 +48,7 @@ const AuthenticateUser = () => {
 
             // Fetch and update the job status
             const response = await fetch(
-                `https://user-credential-manager-backend.onrender.com/access/login`,
+                `${API_URL}/access/login`,
                 requestOptions
             );
 
@@ -117,7 +119,7 @@ const AuthenticateUser = () => {
 
             // Fetch and update the job status
             const response = await fetch(
-                `https://user-credential-manager-backend.onrender.com/access/register`,
+                `${API_URL}/access/register`,
                 requestOptions
             );
 
@@ -155,9 +157,7 @@ const AuthenticateUser = () => {
     const getDivisions = async () => {
         try {
             // Fetch data from the specified endpoint using the provided token and user agent
-            const response = await fetch(
-                `https://user-credential-manager-backend.onrender.com/divisions`
-            );
+            const response = await fetch(`${API_URL}/divisions`);
 
             // Throw an error if the response is not successful
             if (!response.ok) {
