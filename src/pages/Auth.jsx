@@ -9,7 +9,7 @@ export default function Auth() {
     useEffect(() => {
         setLoading(true);
         try {
-            async function getUsers() {
+            const getUsers = async () => {
                 const users = await fetchUsers();
                 // console.log(users);
                 if (!users.ok) {
@@ -19,7 +19,7 @@ export default function Auth() {
                 }
                 setUsers(users.users);
                 setLoading(false);
-            }
+            };
 
             getUsers();
         } catch (err) {
@@ -36,7 +36,7 @@ export default function Auth() {
 
     return (
         <div>
-            <h2 className="text-4xl">
+            <h2 className="text-4xl bg-stone-600 ">
                 An app to manage all employee credentials
             </h2>
 

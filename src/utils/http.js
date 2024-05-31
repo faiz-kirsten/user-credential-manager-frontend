@@ -1,5 +1,5 @@
-let API_URL = process.env.REACT_APP_API_URL;
-API_URL = process.env.REACT_APP_LOCAL_API_URL;
+let API_URL = import.meta.env.VITE_API_URL;
+API_URL = import.meta.env.VITE_LOCAL_API_URL;
 
 export const fetchUsers = async () => {
     const response = await fetch(`${API_URL}/users`);
