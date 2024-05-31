@@ -1,18 +1,26 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import AuthenticateUser from "./pages/AuthenticateUser";
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+    RouterProvider,
+} from "react-router-dom";
 
-const App = () => {
-    return (
-        <div>
-            <div className="app-container">
-                <Routes>
-                    <Route path="/" element={<AuthenticateUser />} />
-                    <Route path="/credential-repo" element={<Home />} />
-                </Routes>
-            </div>
-        </div>
-    );
-};
+// Layouts
+import RootLayout from "./layouts/RootLayout";
+
+// Pages
+import Auth from "./pages/Auth";
+
+const router = createBrowserRouter(
+    createRoutesFromElements(
+        <Route path="/" element={<RootLayout />}>
+            <Route index element={<Auth />} />
+        </Route>
+    )
+);
+
+function App() {
+    return <RouterProvider router={router} />;
+}
 
 export default App;
