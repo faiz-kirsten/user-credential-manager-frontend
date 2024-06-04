@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
-import { fetchUsers } from "../utils/http.js";
+import { fetchUsernames as fetchUsernames } from "../utils/http.js";
+import { Login } from "../components/Login.jsx";
+import { Register } from "../components/Register.jsx";
 
 export default function Auth() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({ message: "" });
-    const [users, setUsers] = useState([]);
+    const [usernames, setUsernames] = useState([]);
+    const [switchForms, setSwitchForms] = useState("login");
 
     useEffect(() => {
         setLoading(true);
         try {
-            const getUsers = async () => {
-                const users = await fetchUsers();
-                // console.log(users);
-                if (!users.ok) {
-                    setError({ message: users.message });
+            const getUsernames = async () => {
+                const fetchedUsernames = await fetchUsernames();
+                console.log(fetchedUsernames);
+                if (!fetchedUsernames.ok) {
+                    setError({ message: fetchedUsernames.message });
                     setLoading(false);
                     return;
                 }
-                setUsers(users.users);
+                setUsernames(fetchedUsernames.usernames);
                 setLoading(false);
             };
 
-            getUsers();
+            getUsernames();
         } catch (err) {
             setError({
                 message: err.message || "Error!! Please try again later",
@@ -31,23 +34,31 @@ export default function Auth() {
     }, []);
 
     function showUsers() {
-        console.log(users);
+        console.log(usernames);
+    }
+
+    function handleSwitchForms(form) {
+        setSwitchForms(form);
     }
 
     return (
-        <div>
-            <h2 className="text-4xl bg-stone-600 ">
-                An app to manage all employee credentials
-            </h2>
+        <div className="">
+            <h2>An app to manage all employee credentials</h2>
 
             {loading ? (
-                <p className="text-4xl">Loading...</p>
+                <p>Loading...</p>
             ) : error.message === "" ? (
                 <>
-                    <p>Users</p>
-                    <button className="bg-red-600" onClick={showUsers}>
-                        Show Users
-                    </button>
+                    {switchForms === "login" ? (
+                        <Login onFormSwitch={handleSwitchForms} />
+                    ) : (
+                        <Register
+                            users={usernames}
+                            onFormSwitch={handleSwitchForms}
+                        />
+                    )}
+
+                    <button onClick={showUsers}>Show Usernames</button>
                 </>
             ) : (
                 <p>{error.message}</p>
