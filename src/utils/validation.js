@@ -13,3 +13,7 @@ export function hasMinLength(value, minLength) {
 export function isEqualsToOtherValue(value, otherValue) {
     return value === otherValue;
 }
+
+export function usernameExists(usernames, enteredUsername) {
+    return usernames.includes(enteredUsername);
+}

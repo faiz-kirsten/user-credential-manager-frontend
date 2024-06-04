@@ -4,7 +4,11 @@ API_URL = import.meta.env.VITE_LOCAL_API_URL;
 export const fetchUsernames = async () => {
     const response = await fetch(`${API_URL}/users/usernames`);
     if (!response.ok) {
-        return { message: "Error!! Please try again later", ok: false };
+        return {
+            message:
+                "Application error!! Please try again later or refresh the page.",
+            ok: false,
+        };
     }
     const data = await response.json();
 
@@ -20,7 +24,7 @@ export const validateUser = async (formData) => {
 
     const response = await fetch(`${API_URL}/login`, requestOptions);
     if (!response.ok) {
-        return { message: "Invalid Password or Username", ok: false };
+        return { message: "Invalid username or password!", ok: false };
     }
     const resData = await response.json();
 
@@ -37,7 +41,8 @@ export const handleRegisterUser = async (formData) => {
     const response = await fetch(`${API_URL}/register`, requestOptions);
     if (!response.ok) {
         return {
-            message: "Error Registering user. Please try again",
+            message:
+                "Error Registering user. Ensure unique username and passwords match",
             ok: false,
         };
     }

@@ -7,7 +7,7 @@ export default function Auth() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({ message: "" });
     const [usernames, setUsernames] = useState([]);
-    const [switchForms, setSwitchForms] = useState("login");
+    const [curSelectedForm, setCurSelectedForm] = useState("login");
 
     useEffect(() => {
         setLoading(true);
@@ -33,13 +33,14 @@ export default function Auth() {
         }
     }, []);
 
-    function showUsers() {
-        console.log(usernames);
+    function changeCurForm(form) {
+        setCurSelectedForm(form);
     }
 
-    function handleSwitchForms(form) {
-        setSwitchForms(form);
-    }
+    // code for debugging
+    // function showUsers() {
+    //     console.log(usernames);
+    // }
 
     return (
         <div className="">
@@ -49,16 +50,16 @@ export default function Auth() {
                 <p>Loading...</p>
             ) : error.message === "" ? (
                 <>
-                    {switchForms === "login" ? (
-                        <Login onFormSwitch={handleSwitchForms} />
+                    {curSelectedForm === "login" ? (
+                        <Login handleChangeCurForm={changeCurForm} />
                     ) : (
                         <Register
-                            users={usernames}
-                            onFormSwitch={handleSwitchForms}
+                            fetchedUsernames={usernames}
+                            handleChangeCurForm={changeCurForm}
                         />
                     )}
-
-                    <button onClick={showUsers}>Show Usernames</button>
+                    {/* Code for debugging */}
+                    {/* <button onClick={showUsers}>Show Usernames</button> */}
                 </>
             ) : (
                 <p>{error.message}</p>

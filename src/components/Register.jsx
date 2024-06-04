@@ -1,25 +1,46 @@
 import { useState } from "react";
 import { handleRegisterUser } from "../utils/http.js";
+import {
+    usernameExists,
+    isEqualsToOtherValue,
+    hasMinLength,
+} from "../utils/validation.js";
+import Input from "./Input.jsx";
+import { Button } from "./Button.jsx";
 
-export const Register = ({ onFormSwitch }) => {
-    const [messageOutcome, setMessageOutcome] = useState({
+export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
+    const [afterSubmitMessage, setAfterSubmitMessage] = useState({
         message: "",
         ok: null,
     });
-
     const [enteredValues, setEnteredValues] = useState({
         password: "",
         confirmedPassword: "",
         username: "",
     });
+    const [didEdit, setDidEdit] = useState({
+        password: "",
+        confirmedPassword: "",
+        username: "",
+    });
+
+    function handleInputBlur(identifier) {
+        setDidEdit((prevEdit) => ({
+            ...prevEdit,
+            [identifier]: true,
+        }));
+    }
 
     function handleInputChange(identifier, value) {
         setEnteredValues((prevValues) => ({
             ...prevValues,
             [identifier]: value,
         }));
+        setDidEdit((prevEdit) => ({
+            ...prevEdit,
+            [identifier]: false,
+        }));
     }
-    const [error, setError] = useState({ message: "" });
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -30,121 +51,170 @@ export const Register = ({ onFormSwitch }) => {
         async function callHandleRegisterUser() {
             const requestOutcome = await handleRegisterUser(formData);
             if (requestOutcome.ok) {
-                document.getElementById("login-form").reset();
+                document.getElementById("register-form").reset();
                 localStorage.setItem(
                     "enteredUsername",
                     requestOutcome.username
                 );
                 setTimeout(() => {
-                    onFormSwitch("login");
-                }, 5000);
+                    handleChangeCurForm("login");
+                }, 2000);
                 setTimeout(() => {
                     localStorage.removeItem("enteredUsername");
-                }, 7000);
+                }, 10000);
             }
 
-            setMessageOutcome(requestOutcome);
+            setAfterSubmitMessage(requestOutcome);
             setTimeout(() => {
-                setMessageOutcome({
+                setAfterSubmitMessage({
                     message: "",
                     ok: null,
                 });
-                setError({ message: "" });
-            }, 5000);
+            }, 3000);
         }
 
         callHandleRegisterUser();
     };
 
-    function showMessage() {
-        console.log(messageOutcome);
-    }
+    // form error handling validation
+    const usernameInvalid =
+        didEdit.username &&
+        usernameExists(fetchedUsernames, enteredValues.username);
+
+    const passwordsDontMatch =
+        didEdit.confirmedPassword &&
+        !isEqualsToOtherValue(
+            enteredValues.password,
+            enteredValues.confirmedPassword
+        );
+
+    const passwordTooShort =
+        didEdit.password && !hasMinLength(enteredValues.password, 8);
+
+    // code for debugging
+    // function showMessage() {
+    //     console.log(afterSubmitMessage);
+    //     console.log(fetchedUsernames);
+    // }
 
     return (
         <div>
-            <form onSubmit={handleSubmit} id="login-form">
-                <div>
-                    <label htmlFor="name">Name</label>
-                    <input id="name" type="name" name="name" required />
-                </div>
-                <div>
-                    <label htmlFor="surname">Surname</label>
-                    <input
-                        id="surname"
-                        type="surname"
-                        name="surname"
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input
-                        id="username"
-                        type="username"
-                        name="username"
-                        value={enteredValues.username}
-                        onChange={(event) =>
-                            handleInputChange("username", event.target.value)
-                        }
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="title">Title</label>
-                    <input id="title" type="title" name="title" required />
-                </div>
+            <form onSubmit={handleSubmit} id="register-form">
+                <Input
+                    label="Name"
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    minLength={1}
+                />
+                <Input
+                    label="Surname"
+                    id="surname"
+                    type="text"
+                    name="surname"
+                    required
+                    minLength={1}
+                />
+                <Input
+                    label="Username"
+                    id="username"
+                    type="text"
+                    name="username"
+                    value={enteredValues.username}
+                    onChange={(event) =>
+                        handleInputChange("username", event.target.value)
+                    }
+                    onBlur={() => handleInputBlur("username")}
+                    minLength={4}
+                    required
+                    error={
+                        usernameInvalid &&
+                        "Username taken...please enter a different username"
+                    }
+                />
 
-                <div className="">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={enteredValues.password}
-                        onChange={(event) =>
-                            handleInputChange("password", event.target.value)
-                        }
-                        required
-                    />
-                </div>
-                <div className="">
-                    <label htmlFor="confirmedPassword">Confirm Password</label>
-                    <input
-                        id="confirmedPassword"
-                        type="password"
-                        name="confirmedPassword"
-                        value={enteredValues.confirmedPassword}
-                        onChange={(event) =>
-                            handleInputChange(
-                                "confirmedPassword",
-                                event.target.value
-                            )
-                        }
-                        required
-                    />
-                </div>
-                <p className="flex gap-3">
-                    <button
+                <Input
+                    label="Title"
+                    type="text"
+                    id="title"
+                    name="title"
+                    required
+                />
+
+                <Input
+                    label="Password"
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={enteredValues.password}
+                    onChange={(event) =>
+                        handleInputChange("password", event.target.value)
+                    }
+                    minLength={8}
+                    onBlur={() => handleInputBlur("password")}
+                    required
+                    error={
+                        passwordTooShort &&
+                        "Password must be at least 8 characters"
+                    }
+                />
+
+                <Input
+                    label="Confirm Password"
+                    id="confirmedPassword"
+                    type="password"
+                    name="confirmedPassword"
+                    value={enteredValues.confirmedPassword}
+                    onChange={(event) =>
+                        handleInputChange(
+                            "confirmedPassword",
+                            event.target.value
+                        )
+                    }
+                    onBlur={() => handleInputBlur("confirmedPassword")}
+                    minLength={8}
+                    required
+                    error={passwordsDontMatch && "Passwords do not match"}
+                />
+
+                <p className="">
+                    <Button
                         type="button"
-                        className=""
-                        onClick={() => onFormSwitch("login")}>
+                        style="tertiary"
+                        onClick={() => {
+                            document.getElementById("register-form").reset();
+                            setEnteredValues({
+                                password: "",
+                                confirmedPassword: "",
+                                username: "",
+                            });
+                            setDidEdit({
+                                password: "",
+                                confirmedPassword: "",
+                                username: "",
+                            });
+                        }}>
+                        Clear
+                    </Button>
+                    <Button
+                        type="button"
+                        style="secondary"
+                        onClick={() => handleChangeCurForm("login")}>
                         Sign In
-                    </button>
-                    <button type="reset" className="">
-                        Reset
-                    </button>
-
-                    <button type="submit" className="">
-                        Register
-                    </button>
+                    </Button>
+                    <Button type="submit" style="primary">
+                        Sign Up
+                    </Button>
                 </p>
             </form>
-            {messageOutcome.message !== "" ? (
+            {afterSubmitMessage.message !== "" ? (
                 <>
-                    <p>{messageOutcome.message}</p>
+                    <p>{afterSubmitMessage.message}</p>
                 </>
             ) : undefined}
-            <button onClick={showMessage}>Show message outcome</button>
+            {/* Code for debugging */}
+            {/* <button onClick={showMessage}>Show message outcome</button> */}
         </div>
     );
 };
