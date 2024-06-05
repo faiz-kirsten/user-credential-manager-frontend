@@ -1,6 +1,20 @@
 export const Button = ({ style, children, ...props }) => {
-    // primary styles
-    // secondary styles
-    // tertiary styles
-    return <button {...props}>{children}</button>;
+    let styles = "py-1 px-3 ";
+
+    if (style === "primary") {
+        styles +=
+            " border-solid border-gray-900 border rounded bg-gray-900 text-white hover:bg-white hover:text-gray-900";
+    } else if (style === "secondary") {
+        styles +=
+            " underline underline-offset-4 hover:text-gray-800 hover:text-blue-600 bg-white text-gray-700 ";
+    } else {
+        styles +=
+            " text-gray-600 hover:underline hover:underline-offset-4 hover:text-blue-600";
+    }
+
+    return (
+        <button className={styles} {...props}>
+            {children}
+        </button>
+    );
 };

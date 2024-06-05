@@ -9,6 +9,7 @@ export const Login = ({ handleChangeCurForm }) => {
     const [loggingIn, setLoggingIn] = useState(false);
     const [afterSubmitMessage, setAfterSubmitMessage] = useState({
         message: "",
+        ok: null,
     });
     const [enteredUsername, setEnteredUsername] = useState(
         localStorage.getItem("enteredUsername") !== null
@@ -18,7 +19,10 @@ export const Login = ({ handleChangeCurForm }) => {
 
     function resetState() {
         setTimeout(() => {
-            setAfterSubmitMessage({ message: "" });
+            setAfterSubmitMessage({
+                message: "",
+                ok: null,
+            });
         }, 2000);
         setLoggingIn(false);
     }
@@ -30,7 +34,8 @@ export const Login = ({ handleChangeCurForm }) => {
         const formData = Object.fromEntries(fd.entries());
         if (formData.username === "" || formData.password === "") {
             setAfterSubmitMessage({
-                message: "Username and password are required",
+                message: "Enter username & password",
+                ok: false,
             });
             resetState();
             return;
@@ -40,19 +45,21 @@ export const Login = ({ handleChangeCurForm }) => {
             const token = await validateUser(formData);
 
             if (!token.ok) {
-                setAfterSubmitMessage({ message: token.message });
+                setAfterSubmitMessage({ message: token.message, ok: false });
                 resetState();
             }
             console.log(token);
             if (token.ok) {
                 localStorage.setItem("token", token.token);
                 setAfterSubmitMessage({
-                    message: "Login Successful, redirecting to home page...",
+                    message: "Login Successful",
+                    ok: true,
                 });
                 setTimeout(() => {
                     navigate("/dashboard");
                     setAfterSubmitMessage({
                         message: "",
+                        ok: null,
                     });
                 }, 2000);
             }
@@ -63,49 +70,70 @@ export const Login = ({ handleChangeCurForm }) => {
         validateFormInput();
     }
 
+    let messageStyles = "text-sm flex items-center pl-2";
+
+    if (afterSubmitMessage.ok === false) messageStyles += " text-red-500 ";
+    if (afterSubmitMessage.ok === true) messageStyles += " text-green-500";
+
     return (
-        <div>
-            <form onSubmit={handleSubmit} id="login-form">
-                <Input
-                    label="Username"
-                    id="username"
-                    type="text"
-                    name="username"
-                    value={enteredUsername}
-                    onChange={(e) => {
-                        setEnteredUsername(e.target.value);
-                    }}
-                />
-                <Input
-                    label="Password"
-                    id="password"
-                    type="password"
-                    name="password"
-                />
-                <p className="">
-                    <Button
-                        style="tertiary"
-                        type="button"
-                        onClick={() => {
-                            document.getElementById("login-form").reset();
-                            setEnteredUsername("");
-                        }}>
-                        Clear
-                    </Button>
-                    <Button
-                        style="secondary"
-                        type="button"
-                        onClick={() => handleChangeCurForm("register")}>
-                        Sign Up
-                    </Button>
-                    <Button type="submit" style="primary">
-                        Sign In
-                    </Button>
-                </p>
-            </form>
-            {afterSubmitMessage.message !== "" && !loggingIn ? (
-                <p className="">{afterSubmitMessage.message}</p>
-            ) : undefined}
-        </div>
+        <>
+            <h2 className="text-xl text-center mb-3">Welcome back</h2>
+            <div className="flex justify-center mb-4">
+                <form
+                    onSubmit={handleSubmit}
+                    id="login-form"
+                    className="flex flex-col gap-5 rounded-md bg-gray-100 p-4 md:w-1/3 w-full">
+                    <Input
+                        label="Username"
+                        id="username"
+                        type="text"
+                        name="username"
+                        value={enteredUsername}
+                        onChange={(e) => {
+                            setEnteredUsername(e.target.value);
+                        }}
+                    />
+                    <Input
+                        label="Password"
+                        id="password"
+                        type="password"
+                        name="password"
+                    />
+                    <div className="flex justify-between md:gap-2">
+                        <div className={messageStyles}>
+                            {afterSubmitMessage.message !== "" && !loggingIn ? (
+                                <p>{afterSubmitMessage.message}</p>
+                            ) : undefined}
+                        </div>
+
+                        <div className="flex md:gap-2">
+                            <Button
+                                style="tertiary"
+                                type="button"
+                                onClick={() => {
+                                    document
+                                        .getElementById("login-form")
+                                        .reset();
+                                    setEnteredUsername("");
+                                }}>
+                                Clear
+                            </Button>
+
+                            <Button type="submit" style="primary">
+                                Sign In
+                            </Button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div className="text-center">
+                <Button
+                    style="secondary"
+                    type="button"
+                    onClick={() => handleChangeCurForm("register")}>
+                    Don&apos;t have an account?
+                </Button>
+            </div>
+        </>
     );
 };

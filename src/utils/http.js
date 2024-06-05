@@ -1,5 +1,5 @@
 let API_URL = import.meta.env.VITE_API_URL;
-// API_URL = import.meta.env.VITE_LOCAL_API_URL;
+API_URL = import.meta.env.VITE_LOCAL_API_URL;
 
 export const fetchUsernames = async () => {
     const response = await fetch(`${API_URL}/users/usernames`);
@@ -41,8 +41,7 @@ export const handleRegisterUser = async (formData) => {
     const response = await fetch(`${API_URL}/register`, requestOptions);
     if (!response.ok) {
         return {
-            message:
-                "Error Registering user. Ensure unique username and passwords match",
+            message: "Error...fix errors",
             ok: false,
         };
     }

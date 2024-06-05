@@ -44,8 +44,6 @@ export default function Auth() {
 
     return (
         <div className="">
-            <h2>An app to manage all employee credentials</h2>
-
             {loading ? (
                 <p>Loading...</p>
             ) : error.message === "" ? (
