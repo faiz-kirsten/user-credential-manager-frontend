@@ -61,6 +61,33 @@ export const handleFetchDivision = async (storedToken) => {
     };
 
     const response = await fetch(`${API_URL}/users/division`, requestOptions);
+    if (!response.ok) {
+        return {
+            message: "Error...",
+            ok: false,
+        };
+    }
+    const resData = response.json();
+
+    return resData;
+};
+
+export const handleFetchUser = async (storedToken, id) => {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`,
+        },
+    };
+
+    const response = await fetch(`${API_URL}/users/${id}`, requestOptions);
+    if (!response.ok) {
+        return {
+            message: "Error...",
+            ok: false,
+        };
+    }
     const resData = response.json();
 
     return resData;

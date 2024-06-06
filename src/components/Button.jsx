@@ -3,7 +3,7 @@ export const Button = ({ style, children, ...props }) => {
 
     if (style === "primary") {
         styles +=
-            " border-solid border-gray-900 border rounded bg-gray-900 text-white hover:bg-white hover:text-gray-900";
+            " border-solid border-gray-700 border rounded bg-gray-700 text-gray-200 hover:bg-gray-200 hover:text-gray-700 hover:border-gray-700";
     } else if (style === "secondary") {
         styles +=
             " underline underline-offset-4 hover:text-gray-800 hover:text-blue-600 bg-white text-gray-700 ";
