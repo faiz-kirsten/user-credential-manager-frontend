@@ -6,6 +6,7 @@ import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { Users } from "./Users";
 import { Button } from "../components/Button";
+import { Credentials } from "./Credentials";
 
 export const Dashboard = () => {
     const storedToken = localStorage.getItem("token");
@@ -75,9 +76,11 @@ export const Dashboard = () => {
                         <>No Division</>
                     ) : undefined}
                     {fetchedDivision.currentUser.division !== null &&
-                    fetchedDivision.currentUser.roles.length === 1 ? (
-                        <>Regular User</>
-                    ) : undefined}
+                    fetchedDivision.currentUser.roles.length === 1
+                        ? navigate(
+                              `/user/${fetchedDivision.currentUser._id}/credentials?division=${fetchedDivision.currentUser.division}&home=true`
+                          )
+                        : undefined}
                     {fetchedDivision.currentUser.division !== null &&
                     fetchedDivision.currentUser.roles.length > 1 ? (
                         <Users otherUsers={fetchedDivision.otherUsers} />

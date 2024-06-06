@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Users = ({ otherUsers }) => {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-ss-lg">
@@ -53,7 +55,11 @@ export const Users = ({ otherUsers }) => {
                                 ))}
                             </td>
                             <td scope="row" className="px-6 py-4">
-                                View Edit
+                                <Link
+                                    to={`/user/${user._id}/credentials?division=${user.division}`}
+                                    className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
+                                    View
+                                </Link>
                             </td>
                         </tr>
                     ))}

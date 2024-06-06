@@ -92,3 +92,31 @@ export const handleFetchUser = async (storedToken, id) => {
 
     return resData;
 };
+
+export const handleFetchUserCredentials = async (
+    storedToken,
+    id,
+    currentUserDivisionId
+) => {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`,
+        },
+    };
+
+    const response = await fetch(
+        `${API_URL}/users/${id}/credentials?division=${currentUserDivisionId}`,
+        requestOptions
+    );
+    if (!response.ok) {
+        return {
+            message: "Error...",
+            ok: false,
+        };
+    }
+    const resData = response.json();
+
+    return resData;
+};
