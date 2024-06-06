@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchUsernames as fetchUsernames } from "../utils/http.js";
 import { Login } from "../components/Login.jsx";
 import { Register } from "../components/Register.jsx";
+import { Loading } from "../components/Loading.jsx";
+import { Error } from "../components/Error.jsx";
 
 export default function Auth() {
     const [loading, setLoading] = useState(false);
@@ -45,7 +47,7 @@ export default function Auth() {
     return (
         <div className="">
             {loading ? (
-                <p>Loading...</p>
+                <Loading loadingMessage="Loading..." />
             ) : error.message === "" ? (
                 <>
                     {curSelectedForm === "login" ? (
@@ -60,7 +62,7 @@ export default function Auth() {
                     {/* <button onClick={showUsers}>Show Usernames</button> */}
                 </>
             ) : (
-                <p>{error.message}</p>
+                <Error>{error.message}</Error>
             )}
         </div>
     );

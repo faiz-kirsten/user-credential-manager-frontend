@@ -1,12 +1,12 @@
 let API_URL = import.meta.env.VITE_API_URL;
-// API_URL = import.meta.env.VITE_LOCAL_API_URL;
+API_URL = import.meta.env.VITE_LOCAL_API_URL;
 
 export const fetchUsernames = async () => {
     const response = await fetch(`${API_URL}/users/usernames`);
     if (!response.ok) {
         return {
             message:
-                "Application error!! Please try again later or refresh the page.",
+                "Application error. Please try again later or refresh the page .",
             ok: false,
         };
     }
@@ -41,12 +41,27 @@ export const handleRegisterUser = async (formData) => {
     const response = await fetch(`${API_URL}/register`, requestOptions);
     if (!response.ok) {
         return {
-            message: "Error...fix errors",
+            message: "Error...",
             ok: false,
         };
     }
 
     const resData = await response.json();
+
+    return resData;
+};
+
+export const handleFetchDivision = async (storedToken) => {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`,
+        },
+    };
+
+    const response = await fetch(`${API_URL}/users/division`, requestOptions);
+    const resData = response.json();
 
     return resData;
 };
