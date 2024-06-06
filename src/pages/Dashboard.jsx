@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { handleFetchDivision } from "../utils/http";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
+import { Users } from "./Users";
 
 export const Dashboard = () => {
     const storedToken = localStorage.getItem("token");
@@ -43,6 +44,7 @@ export const Dashboard = () => {
                 <Loading loadingMessage="Loading..." />
             ) : error.message === "" ? (
                 <>
+                    <>Sub Header</>
                     {fetchedDivision.currentUser.division === null ? (
                         <>No Division</>
                     ) : undefined}
@@ -52,7 +54,7 @@ export const Dashboard = () => {
                     ) : undefined}
                     {fetchedDivision.currentUser.division !== null &&
                     fetchedDivision.currentUser.roles.length > 1 ? (
-                        <>Admin or management</>
+                        <Users otherUsers={fetchedDivision.otherUsers} />
                     ) : undefined}
                 </>
             ) : (
