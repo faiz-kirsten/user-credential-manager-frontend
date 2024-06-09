@@ -30,23 +30,6 @@ export const Dashboard = () => {
                 );
             }
 
-            if (
-                divisionInfo.currentUser.division === null &&
-                divisionInfo.currentUser.requestedDivision === null
-            ) {
-                navigate(
-                    `/users/${divisionInfo.currentUser._id}?requested-division=null`
-                );
-            }
-            if (
-                divisionInfo.currentUser.division === null &&
-                divisionInfo.currentUser.requestedDivision !== null
-            ) {
-                navigate(
-                    `/users/${divisionInfo.currentUser._id}?requested-division=${divisionInfo.currentUser.requestedDivision._id}`
-                );
-            }
-
             setFetchedDivision(divisionInfo);
             setLoading(false);
         };
@@ -100,11 +83,23 @@ export const Dashboard = () => {
                             Logout
                         </Button>
                     </nav>
-
                     {fetchedDivision.currentUser.division !== null &&
                     fetchedDivision.currentUser.roles.length > 1 ? (
                         <Users otherUsers={fetchedDivision.otherUsers} /> // pass down current users to check user roles
                     ) : undefined}
+                    {fetchedDivision.currentUser.division === null &&
+                        fetchedDivision.currentUser.requestedDivision !==
+                            null && (
+                            <div className="text-xl">
+                                You have requested to join the{" "}
+                                {
+                                    fetchedDivision.currentUser
+                                        .requestedDivision.name
+                                }{" "}
+                                division. Please wait until an admin grants you
+                                access.
+                            </div>
+                        )}
                 </>
             ) : (
                 <Error>{error.message}</Error>

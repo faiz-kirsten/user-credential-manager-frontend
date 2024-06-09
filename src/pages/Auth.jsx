@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchUsernames as fetchUsernames } from "../utils/http.js";
+import {
+    fetchUsernames as fetchUsernames,
+    handleFetchDivisions,
+} from "../utils/http.js";
 import { Login } from "../components/Login.jsx";
 import { Register } from "../components/Register.jsx";
 import { Loading } from "../components/Loading.jsx";
@@ -10,6 +13,7 @@ export default function Auth() {
     const [error, setError] = useState({ message: "" });
     const [usernames, setUsernames] = useState([]);
     const [curSelectedForm, setCurSelectedForm] = useState("login");
+    const [fetchedDivisions, setFetchedDivisions] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -22,6 +26,11 @@ export default function Auth() {
                     setLoading(false);
                     return;
                 }
+                const divisions = await handleFetchDivisions();
+                console.log(divisions);
+                console.log("-===-");
+
+                setFetchedDivisions(divisions);
                 setUsernames(fetchedUsernames.usernames);
                 setLoading(false);
             };
@@ -56,6 +65,7 @@ export default function Auth() {
                         <Register
                             fetchedUsernames={usernames}
                             handleChangeCurForm={changeCurForm}
+                            fetchedDivisions={fetchedDivisions}
                         />
                     )}
                     {/* Code for debugging */}

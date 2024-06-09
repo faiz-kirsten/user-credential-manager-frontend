@@ -13,7 +13,6 @@ import Auth from "./pages/Auth";
 import { Dashboard } from "./pages/Dashboard";
 import { UserProfile } from "./pages/UserProfile";
 import { Credentials } from "./pages/Credentials";
-import { SelectDivision } from "./components/SelectDivision";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -22,7 +21,6 @@ const router = createBrowserRouter(
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/users/:id/profile" element={<UserProfile />} />
             <Route path="/users/:id/credentials" element={<Credentials />} />
-            <Route path="/users/:id" element={<SelectDivision />} />
         </Route>
     )
 );

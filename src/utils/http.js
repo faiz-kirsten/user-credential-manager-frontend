@@ -121,16 +121,8 @@ export const handleFetchUserCredentials = async (
     return resData;
 };
 
-export const handleFetchDivisions = async (storedToken) => {
-    const requestOptions = {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${storedToken}`,
-        },
-    };
-
-    const response = await fetch(`${API_URL}/divisions`, requestOptions);
+export const handleFetchDivisions = async () => {
+    const response = await fetch(`${API_URL}/divisions`);
     if (!response.ok) {
         return {
             message: "Error...",

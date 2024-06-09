@@ -8,7 +8,11 @@ import {
 import Input from "./Input.jsx";
 import { Button } from "./Button.jsx";
 
-export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
+export const Register = ({
+    handleChangeCurForm,
+    fetchedUsernames,
+    fetchedDivisions,
+}) => {
     const [afterSubmitMessage, setAfterSubmitMessage] = useState({
         message: "",
         ok: null,
@@ -17,11 +21,13 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
         password: "",
         confirmedPassword: "",
         username: "",
+        requestedDivision: "default",
     });
     const [didEdit, setDidEdit] = useState({
         password: "",
         confirmedPassword: "",
         username: "",
+        requestedDivision: "",
     });
 
     function handleInputBlur(identifier) {
@@ -49,7 +55,18 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
         console.log(formData);
 
         async function callHandleRegisterUser() {
+            if (
+                fetchedUsernames.includes(formData.username) ||
+                formData.password !== formData.confirmedPassword ||
+                formData.password.length < 8 ||
+                formData.requestedDivision === "default"
+            ) {
+                console.log("Invalid");
+                return;
+            }
+            console.log("succeed");
             const requestOutcome = await handleRegisterUser(formData);
+
             if (requestOutcome.ok) {
                 document.getElementById("register-form").reset();
                 localStorage.setItem(
@@ -77,24 +94,33 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
     };
 
     // form error handling validation
-    const usernameInvalid =
+    const checkIfValidUsername =
         didEdit.username &&
         usernameExists(fetchedUsernames, enteredValues.username);
 
-    const passwordsDontMatch =
+    const checkIfPasswordsMatch =
         didEdit.confirmedPassword &&
         !isEqualsToOtherValue(
             enteredValues.password,
             enteredValues.confirmedPassword
         );
 
-    const passwordTooShort =
+    const checkIfPasswordTooShort =
         didEdit.password && !hasMinLength(enteredValues.password, 8);
+
+    const checkIfDivisionWasSelected =
+        didEdit.requestedDivision &&
+        enteredValues.requestedDivision === "default";
 
     let messageStyles = "text-sm flex items-center pl-2";
 
     if (afterSubmitMessage.ok === false) messageStyles += " text-red-500 ";
     if (afterSubmitMessage.ok === true) messageStyles += " text-green-500";
+
+    let inputErrorStyles = "w-full h-10 px-2 rounded";
+    if (checkIfDivisionWasSelected) {
+        inputErrorStyles += " border border-red-500 border-solid";
+    }
 
     // code for debugging
     // function showMessage() {
@@ -138,7 +164,7 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
                         onBlur={() => handleInputBlur("username")}
                         minLength={4}
                         required
-                        error={usernameInvalid && "Username exists..."}
+                        error={checkIfValidUsername && "Username exists..."}
                     />
 
                     <Input
@@ -148,6 +174,39 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
                         name="title"
                         required
                     />
+
+                    <div className="grid gap-1.5">
+                        <label
+                            htmlFor="requestedDivision"
+                            className="text-gray-700">
+                            Request A Division To Join
+                        </label>
+                        <select
+                            className={inputErrorStyles}
+                            required
+                            id="requestedDivision"
+                            name="requestedDivision"
+                            value={enteredValues.requestedDivision}
+                            onChange={(event) =>
+                                handleInputChange(
+                                    "requestedDivision",
+                                    event.target.value
+                                )
+                            }
+                            onBlur={() => handleInputBlur("requestedDivision")}>
+                            <option value="default">Select A Division</option>
+                            {fetchedDivisions.allDivisions.map((division) => (
+                                <option key={division._id} value={division._id}>
+                                    {division.name}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="">
+                            {checkIfDivisionWasSelected && (
+                                <p>Please select a division</p>
+                            )}
+                        </div>
+                    </div>
 
                     <Input
                         label="Password"
@@ -162,7 +221,7 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
                         onBlur={() => handleInputBlur("password")}
                         required
                         error={
-                            passwordTooShort &&
+                            checkIfPasswordTooShort &&
                             "Password must be at least 8 characters"
                         }
                     />
@@ -182,7 +241,9 @@ export const Register = ({ handleChangeCurForm, fetchedUsernames }) => {
                         onBlur={() => handleInputBlur("confirmedPassword")}
                         minLength={8}
                         required
-                        error={passwordsDontMatch && "Passwords do not match"}
+                        error={
+                            checkIfPasswordsMatch && "Passwords do not match"
+                        }
                     />
 
                     <div className="flex justify-between md:gap-2">
