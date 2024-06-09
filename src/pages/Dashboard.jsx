@@ -14,6 +14,7 @@ export const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState({ message: "" });
     const [fetchedDivision, setFetchedDivision] = useState([]);
+    const [showRequestedUsers, setShowRequestedUsers] = useState(false);
 
     useEffect(() => {
         const getDivision = async () => {
@@ -69,7 +70,19 @@ export const Dashboard = () => {
                     <nav className="flex gap-2 mb-4 justify-center">
                         {fetchedDivision.currentUser.roles.includes(
                             "admin"
-                        ) && <Button style="primary">Requested Users</Button>}
+                        ) && (
+                            <Button
+                                style="primary"
+                                onClick={() =>
+                                    setShowRequestedUsers(
+                                        (prevState) => !prevState
+                                    )
+                                }>
+                                {showRequestedUsers
+                                    ? "Hide Requested"
+                                    : "Show Requested"}
+                            </Button>
+                        )}
                         <Button
                             style="primary"
                             onClick={() =>
@@ -84,9 +97,25 @@ export const Dashboard = () => {
                         </Button>
                     </nav>
                     {fetchedDivision.currentUser.division !== null &&
-                    fetchedDivision.currentUser.roles.length > 1 ? (
-                        <Users otherUsers={fetchedDivision.otherUsers} /> // pass down current users to check user roles
+                    fetchedDivision.currentUser.roles.includes("admin") ? (
+                        <>
+                            {!showRequestedUsers ? (
+                                <Users users={fetchedDivision.otherUsers} />
+                            ) : (
+                                <Users
+                                    users={fetchedDivision.requestedUsers}
+                                    showRequestedUsers={true}
+                                />
+                            )}
+                        </>
                     ) : undefined}
+
+                    {fetchedDivision.currentUser.division !== null &&
+                    !fetchedDivision.currentUser.roles.includes("admin") &&
+                    fetchedDivision.currentUser.roles.includes("management") ? (
+                        <Users users={fetchedDivision.otherUsers} />
+                    ) : undefined}
+
                     {fetchedDivision.currentUser.division === null &&
                         fetchedDivision.currentUser.requestedDivision !==
                             null && (

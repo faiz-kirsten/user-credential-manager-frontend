@@ -133,28 +133,3 @@ export const handleFetchDivisions = async () => {
 
     return resData;
 };
-
-export const handleSelectDivision = async (body, storedToken) => {
-    const requestOptions = {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${storedToken}`,
-        },
-        body: JSON.stringify(body),
-    };
-
-    const response = await fetch(
-        `${API_URL}/users/${body.updatedUserId}?selectingDivision=true`,
-        requestOptions
-    );
-    if (!response.ok) {
-        return {
-            message: "Error...",
-            ok: false,
-        };
-    }
-    const resData = response.json();
-
-    return resData;
-};

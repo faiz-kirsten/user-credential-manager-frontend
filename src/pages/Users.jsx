@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { Button } from "../components/Button";
 
-export const Users = ({ otherUsers }) => {
+export const Users = ({ users, showRequestedUsers }) => {
+    const handleUsersRequest = async () => {};
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-ss-lg">
             <table className="w-full text-sm text-left text-gray-500 ">
@@ -27,7 +29,7 @@ export const Users = ({ otherUsers }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {otherUsers.map((user) => (
+                    {users.map((user) => (
                         <tr key={user.username} className="bg-white border-b">
                             <td
                                 scope="row"
@@ -54,12 +56,18 @@ export const Users = ({ otherUsers }) => {
                                     </div>
                                 ))}
                             </td>
-                            <td scope="row" className="px-6 py-4">
-                                <Link
-                                    to={`/user/${user._id}/credentials?division=${user.division}`}
-                                    className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                    View
-                                </Link>
+                            <td scope="row" className="">
+                                {showRequestedUsers ? (
+                                    <button className="border-solid border-gray-700 border rounded bg-gray-700 text-gray-200 hover:bg-gray-200 hover:text-gray-700 hover:border-gray-700 px-1 py-0.5">
+                                        Accept
+                                    </button>
+                                ) : (
+                                    <Link
+                                        to={`/users/${user._id}/credentials?division=${user.division}`}
+                                        className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
+                                        View Credentials
+                                    </Link>
+                                )}
                             </td>
                         </tr>
                     ))}
