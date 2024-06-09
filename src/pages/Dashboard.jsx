@@ -19,6 +19,34 @@ export const Dashboard = () => {
         const getDivision = async () => {
             const divisionInfo = await handleFetchDivision(storedToken);
             console.log(divisionInfo);
+            console.log("-===-");
+
+            if (
+                divisionInfo.currentUser.division !== null &&
+                divisionInfo.currentUser.roles.length === 1
+            ) {
+                navigate(
+                    `/users/${divisionInfo.currentUser._id}/credentials?division=${divisionInfo.currentUser.division}&home=true`
+                );
+            }
+
+            if (
+                divisionInfo.currentUser.division === null &&
+                divisionInfo.currentUser.requestedDivision === null
+            ) {
+                navigate(
+                    `/users/${divisionInfo.currentUser._id}?requested-division=null`
+                );
+            }
+            if (
+                divisionInfo.currentUser.division === null &&
+                divisionInfo.currentUser.requestedDivision !== null
+            ) {
+                navigate(
+                    `/users/${divisionInfo.currentUser._id}?requested-division=${divisionInfo.currentUser.requestedDivision._id}`
+                );
+            }
+
             setFetchedDivision(divisionInfo);
             setLoading(false);
         };
@@ -44,7 +72,7 @@ export const Dashboard = () => {
 
     const handleShowProfile = (userId) => {
         console.log(userId);
-        navigate(`/user/${userId}/profile`);
+        navigate(`/users/${userId}/profile`);
     };
 
     if (!storedToken) return <Unauthorised />;
@@ -72,18 +100,10 @@ export const Dashboard = () => {
                             Logout
                         </Button>
                     </nav>
-                    {fetchedDivision.currentUser.division === null ? (
-                        <>No Division</>
-                    ) : undefined}
-                    {fetchedDivision.currentUser.division !== null &&
-                    fetchedDivision.currentUser.roles.length === 1
-                        ? navigate(
-                              `/user/${fetchedDivision.currentUser._id}/credentials?division=${fetchedDivision.currentUser.division}&home=true`
-                          )
-                        : undefined}
+
                     {fetchedDivision.currentUser.division !== null &&
                     fetchedDivision.currentUser.roles.length > 1 ? (
-                        <Users otherUsers={fetchedDivision.otherUsers} />
+                        <Users otherUsers={fetchedDivision.otherUsers} /> // pass down current users to check user roles
                     ) : undefined}
                 </>
             ) : (

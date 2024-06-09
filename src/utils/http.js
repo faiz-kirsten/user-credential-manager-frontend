@@ -1,5 +1,5 @@
 let API_URL = import.meta.env.VITE_API_URL;
-// API_URL = import.meta.env.VITE_LOCAL_API_URL;
+API_URL = import.meta.env.VITE_LOCAL_API_URL;
 
 export const fetchUsernames = async () => {
     const response = await fetch(`${API_URL}/users/usernames`);
@@ -108,6 +108,52 @@ export const handleFetchUserCredentials = async (
 
     const response = await fetch(
         `${API_URL}/users/${id}/credentials?division=${currentUserDivisionId}`,
+        requestOptions
+    );
+    if (!response.ok) {
+        return {
+            message: "Error...",
+            ok: false,
+        };
+    }
+    const resData = response.json();
+
+    return resData;
+};
+
+export const handleFetchDivisions = async (storedToken) => {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`,
+        },
+    };
+
+    const response = await fetch(`${API_URL}/divisions`, requestOptions);
+    if (!response.ok) {
+        return {
+            message: "Error...",
+            ok: false,
+        };
+    }
+    const resData = response.json();
+
+    return resData;
+};
+
+export const handleSelectDivision = async (body, storedToken) => {
+    const requestOptions = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`,
+        },
+        body: JSON.stringify(body),
+    };
+
+    const response = await fetch(
+        `${API_URL}/users/${body.updatedUserId}?selectingDivision=true`,
         requestOptions
     );
     if (!response.ok) {

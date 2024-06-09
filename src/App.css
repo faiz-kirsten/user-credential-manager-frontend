@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 textarea:focus,
-input:focus {
+input:focus,
+select:focus {
     outline: none;
 }
 
