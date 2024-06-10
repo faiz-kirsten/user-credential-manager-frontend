@@ -6,7 +6,6 @@ import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { Users } from "./Users";
 import { Button } from "../components/Button";
-import { Credentials } from "./Credentials";
 
 export const Dashboard = () => {
     const storedToken = localStorage.getItem("token");
@@ -102,10 +101,22 @@ export const Dashboard = () => {
                             {!showRequestedUsers ? (
                                 <Users users={fetchedDivision.otherUsers} />
                             ) : (
-                                <Users
-                                    users={fetchedDivision.requestedUsers}
-                                    showRequestedUsers={true}
-                                />
+                                <>
+                                    {fetchedDivision.requestedUsers.length >
+                                    0 ? (
+                                        <Users
+                                            users={
+                                                fetchedDivision.requestedUsers
+                                            }
+                                            showRequestedUsers={true}
+                                        />
+                                    ) : (
+                                        <div className="text-xl">
+                                            There are no users requesting to
+                                            join the division
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </>
                     ) : undefined}

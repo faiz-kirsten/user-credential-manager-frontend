@@ -1,8 +1,33 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
+import { updateUser } from "../utils/http";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Loading2 } from "../components/Loading2";
 
 export const Users = ({ users, showRequestedUsers }) => {
-    const handleUsersRequest = async () => {};
+    const storedToken = localStorage.getItem("token");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const handleUsersRequest = async (userId, requestedDivision) => {
+        setLoading(true);
+
+        const updatedUser = await updateUser(
+            {
+                userId,
+                properties: {
+                    division: requestedDivision,
+                    requestedDivision: null,
+                },
+                accept: true,
+            },
+            false,
+            storedToken
+        );
+
+        navigate(0);
+        setLoading(false);
+    };
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-ss-lg">
             <table className="w-full text-sm text-left text-gray-500 ">
@@ -56,11 +81,24 @@ export const Users = ({ users, showRequestedUsers }) => {
                                     </div>
                                 ))}
                             </td>
-                            <td scope="row" className="">
+                            <td scope="row" className="px-6 py-4">
                                 {showRequestedUsers ? (
-                                    <button className="border-solid border-gray-700 border rounded bg-gray-700 text-gray-200 hover:bg-gray-200 hover:text-gray-700 hover:border-gray-700 px-1 py-0.5">
-                                        Accept
-                                    </button>
+                                    <>
+                                        {loading ? (
+                                            <Loading2 />
+                                        ) : (
+                                            <Button
+                                                style="primary"
+                                                onClick={() =>
+                                                    handleUsersRequest(
+                                                        user._id,
+                                                        user.requestedDivision
+                                                    )
+                                                }>
+                                                Accept
+                                            </Button>
+                                        )}
+                                    </>
                                 ) : (
                                     <Link
                                         to={`/users/${user._id}/credentials?division=${user.division}`}

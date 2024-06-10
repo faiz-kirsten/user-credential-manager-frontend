@@ -3,6 +3,7 @@ import { validateUser } from "../utils/http";
 import { useNavigate } from "react-router-dom";
 import Input from "./Input";
 import { Button } from "./Button";
+import { Loading2 } from "./Loading2";
 
 export const Login = ({ handleChangeCurForm }) => {
     const navigate = useNavigate();
@@ -118,10 +119,13 @@ export const Login = ({ handleChangeCurForm }) => {
                                 }}>
                                 Clear
                             </Button>
-
-                            <Button type="submit" style="primary">
-                                Sign In
-                            </Button>
+                            {loggingIn ? (
+                                <Loading2 />
+                            ) : (
+                                <Button style="primary" type="submit">
+                                    Sign In
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </form>

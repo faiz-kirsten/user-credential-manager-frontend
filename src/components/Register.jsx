@@ -7,6 +7,7 @@ import {
 } from "../utils/validation.js";
 import Input from "./Input.jsx";
 import { Button } from "./Button.jsx";
+import { Loading2 } from "./Loading2.jsx";
 
 export const Register = ({
     handleChangeCurForm,
@@ -29,6 +30,7 @@ export const Register = ({
         username: "",
         requestedDivision: "",
     });
+    const [loading, setLoading] = useState(false);
 
     function handleInputBlur(identifier) {
         setDidEdit((prevEdit) => ({
@@ -50,6 +52,7 @@ export const Register = ({
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setLoading(true);
         const fd = new FormData(event.target);
         const formData = Object.fromEntries(fd.entries());
         console.log(formData);
@@ -73,6 +76,7 @@ export const Register = ({
                     "enteredUsername",
                     requestOutcome.username
                 );
+
                 setTimeout(() => {
                     handleChangeCurForm("login");
                 }, 2000);
@@ -80,7 +84,7 @@ export const Register = ({
                     localStorage.removeItem("enteredUsername");
                 }, 10000);
             }
-
+            setLoading(false);
             setAfterSubmitMessage(requestOutcome);
             setTimeout(() => {
                 setAfterSubmitMessage({
@@ -276,10 +280,13 @@ export const Register = ({
                                 }}>
                                 Clear
                             </Button>
-
-                            <Button type="submit" style="primary">
-                                Sign Up
-                            </Button>
+                            {loading ? (
+                                <Loading2 />
+                            ) : (
+                                <Button style="primary" type="submit">
+                                    Sign Up
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </form>
