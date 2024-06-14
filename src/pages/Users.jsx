@@ -4,6 +4,8 @@ import { updateUser } from "../utils/http";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loading2 } from "../components/Loading2";
+import { FaKey } from "react-icons/fa6";
+import { FaUser } from "react-icons/fa";
 
 export const Users = ({ users, showRequestedUsers }) => {
     const storedToken = localStorage.getItem("token");
@@ -100,11 +102,18 @@ export const Users = ({ users, showRequestedUsers }) => {
                                         )}
                                     </>
                                 ) : (
-                                    <Link
-                                        to={`/users/${user._id}/credentials?division=${user.division}`}
-                                        className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                        View Credentials
-                                    </Link>
+                                    <div className="flex gap-1 items-center">
+                                        <Link
+                                            to={`/users/${user._id}/credentials?division=${user.division}`}
+                                            className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
+                                            <FaKey />
+                                        </Link>
+                                        <Link
+                                            to={`/users/${user._id}/profile`}
+                                            className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
+                                            <FaUser />
+                                        </Link>
+                                    </div>
                                 )}
                             </td>
                         </tr>

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { handleFetchUser } from "../utils/http";
 import { Button } from "../components/Button";
+import { ShowUserInfo } from "../components/ShowUserInfo";
 
 export const UserProfile = () => {
     const storedToken = localStorage.getItem("token");
@@ -13,6 +14,41 @@ export const UserProfile = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState({ message: "" });
     const [fetchedUser, setFetchedUser] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
+    const [afterSubmitMessage, setAfterSubmitMessage] = useState({
+        message: "",
+        ok: null,
+    });
+    const [enteredValues, setEnteredValues] = useState({
+        password: "",
+        confirmedPassword: "",
+        username: "",
+        requestedDivision: "default",
+    });
+    const [didEdit, setDidEdit] = useState({
+        password: "",
+        confirmedPassword: "",
+        username: "",
+        requestedDivision: "",
+    });
+
+    function handleInputBlur(identifier) {
+        setDidEdit((prevEdit) => ({
+            ...prevEdit,
+            [identifier]: true,
+        }));
+    }
+
+    function handleInputChange(identifier, value) {
+        setEnteredValues((prevValues) => ({
+            ...prevValues,
+            [identifier]: value,
+        }));
+        setDidEdit((prevEdit) => ({
+            ...prevEdit,
+            [identifier]: false,
+        }));
+    }
 
     if (!storedToken)
         setTimeout(() => {
@@ -45,6 +81,10 @@ export const UserProfile = () => {
         navigate("/dashboard");
     };
 
+    const handleIsEditing = () => {
+        setIsEditing(!isEditing);
+    };
+
     if (!storedToken) return <Unauthorised />;
     return (
         <div>
@@ -56,11 +96,42 @@ export const UserProfile = () => {
                         <Button style="primary" onClick={handleGoBack}>
                             Go Back
                         </Button>
-                        <Button onClick={handleLogout} style="secondary">
-                            Logout
-                        </Button>
+                        {}
                     </nav>
-                    <>{fetchedUser.username}</>
+                    <div className="flex justify-center mb-4">
+                        <div className="flex flex-col gap-5 rounded-md bg-gray-100 p-4 md:w-1/3 w-full">
+                            {!isEditing ? (
+                                <ShowUserInfo fetchedUser={fetchedUser} />
+                            ) : (
+                                <></>
+                            )}
+                            <div className="flex justify-between md:gap-2">
+                                <div className=""></div>
+                                <div className="flex md:gap-2">
+                                    {!isEditing ? (
+                                        <>
+                                            <Button
+                                                style="primary"
+                                                onClick={handleIsEditing}>
+                                                Edit
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                style="tertiary"
+                                                onClick={handleIsEditing}>
+                                                Cancel
+                                            </Button>
+                                            <Button style="primary">
+                                                Save
+                                            </Button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </>
             ) : (
                 <Error>{error.message}</Error>
