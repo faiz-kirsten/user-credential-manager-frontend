@@ -168,7 +168,8 @@ export const UserProfile = () => {
         console.log(updatedUser);
         if (updatedUser.ok) {
             setTimeout(() => {
-                navigate(0);
+                // navigate(0);
+                window.location.reload();
             }, 1000);
         }
     };
