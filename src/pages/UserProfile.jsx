@@ -168,8 +168,7 @@ export const UserProfile = () => {
         console.log(updatedUser);
         if (updatedUser.ok) {
             setTimeout(() => {
-                // navigate(0);
-                window.location.reload();
+                navigate("/dashboard");
             }, 1000);
         }
     };
