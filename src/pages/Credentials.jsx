@@ -46,7 +46,7 @@ export const Credentials = () => {
 
     const handleShowProfile = (userId) => {
         console.log(userId);
-        navigate(`/users/${userId}/profile`);
+        navigate(`/users/${userId}/profile?currentUser=true`);
     };
 
     const handleLogout = () => {

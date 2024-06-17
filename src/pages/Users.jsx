@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { Loading2 } from "../components/Loading2";
 import { FaKey } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
+import PropTypes from "prop-types";
 
-export const Users = ({ users, showRequestedUsers }) => {
+export const Users = ({ users, showRequestedUsers, currentUser }) => {
     const storedToken = localStorage.getItem("token");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -108,11 +109,16 @@ export const Users = ({ users, showRequestedUsers }) => {
                                             className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
                                             <FaKey />
                                         </Link>
-                                        <Link
-                                            to={`/users/${user._id}/profile`}
-                                            className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                            <FaUser />
-                                        </Link>
+
+                                        {currentUser.roles.includes(
+                                            "admin"
+                                        ) && (
+                                            <Link
+                                                to={`/users/${user._id}/profile?currentUser=false`}
+                                                className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
+                                                <FaUser />
+                                            </Link>
+                                        )}
                                     </div>
                                 )}
                             </td>
@@ -122,4 +128,9 @@ export const Users = ({ users, showRequestedUsers }) => {
             </table>
         </div>
     );
+};
+
+Users.propTypes = {
+    users: PropTypes.array,
+    showRequestedUsers: PropTypes.array,
 };

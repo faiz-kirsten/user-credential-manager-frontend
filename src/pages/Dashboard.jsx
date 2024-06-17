@@ -55,7 +55,7 @@ export const Dashboard = () => {
 
     const handleShowProfile = (userId) => {
         console.log(userId);
-        navigate(`/users/${userId}/profile`);
+        navigate(`/users/${userId}/profile?currentUser=true`);
     };
 
     if (!storedToken) return <Unauthorised />;
@@ -99,7 +99,10 @@ export const Dashboard = () => {
                     fetchedDivision.currentUser.roles.includes("admin") ? (
                         <>
                             {!showRequestedUsers ? (
-                                <Users users={fetchedDivision.otherUsers} />
+                                <Users
+                                    users={fetchedDivision.otherUsers}
+                                    currentUser={fetchedDivision.currentUser}
+                                />
                             ) : (
                                 <>
                                     {fetchedDivision.requestedUsers.length >
@@ -109,6 +112,9 @@ export const Dashboard = () => {
                                                 fetchedDivision.requestedUsers
                                             }
                                             showRequestedUsers={true}
+                                            currentUser={
+                                                fetchedDivision.currentUser
+                                            }
                                         />
                                     ) : (
                                         <div className="text-xl">
@@ -124,7 +130,10 @@ export const Dashboard = () => {
                     {fetchedDivision.currentUser.division !== null &&
                     !fetchedDivision.currentUser.roles.includes("admin") &&
                     fetchedDivision.currentUser.roles.includes("management") ? (
-                        <Users users={fetchedDivision.otherUsers} />
+                        <Users
+                            users={fetchedDivision.otherUsers}
+                            currentUser={fetchedDivision.currentUser}
+                        />
                     ) : undefined}
 
                     {fetchedDivision.currentUser.division === null &&

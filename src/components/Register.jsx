@@ -8,6 +8,7 @@ import {
 import Input from "./Input.jsx";
 import { Button } from "./Button.jsx";
 import { Loading2 } from "./Loading2.jsx";
+import PropTypes from "prop-types";
 
 export const Register = ({
     handleChangeCurForm,
@@ -304,4 +305,9 @@ export const Register = ({
             {/* <button onClick={showMessage}>Show message outcome</button> */}
         </>
     );
+};
+
+Register.propTypes = {
+    handleChangeCurForm: PropTypes.func,
+    fetchedUsernames: PropTypes.array,
 };

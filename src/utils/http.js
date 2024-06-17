@@ -148,12 +148,6 @@ export const updateUser = async (body, currentUser, storedToken) => {
         `${API_URL}/users/${body.userId}?currentUser=${currentUser}`,
         requestOptions
     );
-    if (!response.ok) {
-        return {
-            message: "Error...",
-            ok: false,
-        };
-    }
     const resData = response.json();
 
     return resData;

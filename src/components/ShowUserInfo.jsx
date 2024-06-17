@@ -1,7 +1,7 @@
 export const ShowUserInfo = ({ fetchedUser }) => {
     return (
         <>
-            <div className="grid gap-1 text-lg">
+            <div className="grid gap-1">
                 <span className="text-gray-700">Username: </span>
                 <span className="">{fetchedUser.username}</span>
             </div>
