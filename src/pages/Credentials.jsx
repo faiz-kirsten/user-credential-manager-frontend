@@ -6,6 +6,7 @@ import { Error } from "../components/Error";
 import { Button } from "../components/Button";
 import { handleFetchUserCredentials } from "../utils/http";
 import { CredentialsTable } from "../components/CredentialsTable";
+import { ArrowLeft } from "lucide-react";
 
 export const Credentials = () => {
     const storedToken = localStorage.getItem("token");
@@ -91,10 +92,15 @@ export const Credentials = () => {
                     ) : (
                         <>
                             <nav>
-                                {" "}
-                                <Button style="primary" onClick={handleGoBack}>
-                                    Go Back
-                                </Button>
+                                <div
+                                    onClick={handleGoBack}
+                                    className="flex items-center gap-1 hover:cursor-pointer hover:text-blue-600 underline underline-offset-4">
+                                    <ArrowLeft
+                                        absoluteStrokeWidth
+                                        className="size-5 "
+                                    />{" "}
+                                    <span className="text-lg">Go Back</span>
+                                </div>
                             </nav>
                             <h2>
                                 Current User: {fetchedCredentials.user.username}

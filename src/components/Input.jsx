@@ -1,5 +1,5 @@
 export default function Input({ label, id, error, ...props }) {
-    let styles = "w-full h-10 px-2 rounded";
+    let styles = "w-full h-10 px-2 rounded bg-gray-100";
     if (error) {
         styles += " border border-red-500 border-solid";
     }

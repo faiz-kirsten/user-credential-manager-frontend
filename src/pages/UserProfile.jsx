@@ -17,6 +17,8 @@ import {
     isEqualsToOtherValue,
     hasMinLength,
 } from "../utils/validation.js";
+import { Loading2 } from "../components/Loading2.jsx";
+import { ArrowLeft } from "lucide-react";
 
 export const UserProfile = () => {
     const storedToken = localStorage.getItem("token");
@@ -42,9 +44,12 @@ export const UserProfile = () => {
         surname: "",
         title: "",
         division: "",
-        requestedDivision: "",
     });
-
+    const [currentRoles, setCurrentRoles] = useState([
+        { role: "user", set: false },
+        { role: "management", set: false },
+        { role: "admin", set: false },
+    ]);
     const [didEdit, setDidEdit] = useState({
         previousPassword: "",
         updatedPassword: "",
@@ -53,9 +58,9 @@ export const UserProfile = () => {
         surname: "",
         title: "",
         division: "",
-        requestedDivision: "",
     });
     const isCurrentUser = searchParams.get("currentUser");
+    const fetchedRoles = ["user", "management", "admin"];
 
     function handleInputBlur(identifier) {
         setDidEdit((prevEdit) => ({
@@ -94,6 +99,14 @@ export const UserProfile = () => {
                 division: user.division._id,
             }));
 
+            setCurrentRoles((prevEdit) =>
+                prevEdit.map((role) =>
+                    user.roles.includes(role.role)
+                        ? { ...role, set: true }
+                        : role
+                )
+            );
+
             const fetchedUsernames = await fetchUsernames();
             setFetchedUsernames(
                 fetchedUsernames.usernames.filter(
@@ -118,7 +131,7 @@ export const UserProfile = () => {
             });
             setLoading(false);
         }
-    }, [isEditing]);
+    }, []);
 
     const handleGoBack = () => {
         navigate("/dashboard");
@@ -130,10 +143,14 @@ export const UserProfile = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // setLoading(true);
+        // setUpdatingStatus(true);
         const fd = new FormData(event.target);
+        const enteredRoles = fd.getAll("roles");
         const formData = Object.fromEntries(fd.entries());
+        formData.roles = ["user", ...enteredRoles];
         console.log(formData);
+        console.log("---");
+        console.log(enteredValues);
         if (
             fetchedUsernames.includes(formData.username) ||
             (formData.previousPassword !== "" &&
@@ -143,6 +160,7 @@ export const UserProfile = () => {
                 formData.updatedPassword !== "")
         ) {
             console.log("Invalid");
+            setUpdatingStatus(false);
             return;
         }
         const updatedUser = await updateUser(
@@ -154,6 +172,8 @@ export const UserProfile = () => {
             storedToken
         );
 
+        console.log(updatedUser);
+
         setAfterSubmitMessage({
             ok: updatedUser.ok,
             message: updatedUser.message,
@@ -163,6 +183,7 @@ export const UserProfile = () => {
                 message: "",
                 ok: null,
             });
+            setUpdatingStatus(false);
         }, 2000);
 
         console.log(updatedUser);
@@ -197,27 +218,32 @@ export const UserProfile = () => {
     if (afterSubmitMessage.ok === false) messageStyles += " text-red-500 ";
     if (afterSubmitMessage.ok === true) messageStyles += " text-green-500";
 
-    let inputErrorStyles = "w-full h-10 px-2 rounded";
+    let inputErrorStyles = "w-full h-10 px-2 rounded bg-gray-100";
     if (checkIfDivisionWasSelected) {
         inputErrorStyles += " border border-red-500 border-solid";
     }
 
     if (!storedToken) return <Unauthorised />;
     return (
-        <div>
+        <div className="flex justify-center">
             {loading ? (
                 <Loading loadingMessage="Loading..." />
             ) : error.message === "" ? (
-                <>
-                    <nav className="flex gap-2 mb-4 justify-center">
-                        <Button style="primary" onClick={handleGoBack}>
-                            Go Back
-                        </Button>
-                        {}
+                <div className="flex flex-col gap-2  md:w-1/3 w-full">
+                    <nav className="">
+                        <div
+                            onClick={handleGoBack}
+                            className="flex items-center gap-1 hover:cursor-pointer hover:text-blue-600 underline underline-offset-4">
+                            <ArrowLeft
+                                absoluteStrokeWidth
+                                className="size-5 "
+                            />{" "}
+                            <span className="text-lg">Go Back</span>
+                        </div>
                     </nav>
-                    <div className="flex justify-center mb-4">
+                    <div className=" p-4 rounded-md bg-white">
                         {!isEditing ? (
-                            <div className="flex flex-col gap-5 rounded-md bg-gray-100 p-4 md:w-1/3 w-full">
+                            <div className="">
                                 <ShowUserInfo fetchedUser={fetchedUser} />
                                 <div className="flex md:gap-2 justify-between">
                                     <div></div>
@@ -234,7 +260,7 @@ export const UserProfile = () => {
                             <form
                                 onSubmit={handleSubmit}
                                 id="profile-update-form"
-                                className="flex flex-col gap-5 rounded-md bg-gray-100 p-4 md:w-1/3 w-full">
+                                className="grid gap-2">
                                 <Input
                                     label="Username"
                                     id="username"
@@ -352,6 +378,36 @@ export const UserProfile = () => {
                                                 )}
                                             </div>
                                         </div>
+                                        <fieldset>
+                                            <legend className="text-gray-700">
+                                                Roles
+                                            </legend>
+                                            {currentRoles.map((role) => (
+                                                <div
+                                                    key={role.role}
+                                                    className="flex items-center gap-1">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={role.role}
+                                                        name="roles"
+                                                        value={role.role}
+                                                        defaultChecked={
+                                                            role.set
+                                                        }
+                                                        disabled={
+                                                            role.role === "user"
+                                                        }
+                                                    />
+
+                                                    <label htmlFor={role.role}>
+                                                        {role.role
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                            role.role.slice(1)}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </fieldset>
                                     </>
                                 )}
 
@@ -408,9 +464,13 @@ export const UserProfile = () => {
                                                     onClick={handleIsEditing}>
                                                     Cancel
                                                 </Button>
-                                                <Button style="primary">
-                                                    Save
-                                                </Button>
+                                                {updatingStatus ? (
+                                                    <Loading2 />
+                                                ) : (
+                                                    <Button style="primary">
+                                                        Save
+                                                    </Button>
+                                                )}
                                             </>
                                         )}
                                     </div>
@@ -418,7 +478,7 @@ export const UserProfile = () => {
                             </form>
                         )}
                     </div>
-                </>
+                </div>
             ) : (
                 <Error>{error.message}</Error>
             )}

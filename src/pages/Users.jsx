@@ -7,6 +7,15 @@ import { Loading2 } from "../components/Loading2";
 import { FaKey } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import PropTypes from "prop-types";
+import {
+    Check,
+    CircleCheck,
+    CircleUser,
+    Eye,
+    Settings2,
+    UserCheck,
+    Vault,
+} from "lucide-react";
 
 export const Users = ({ users, showRequestedUsers, currentUser }) => {
     const storedToken = localStorage.getItem("token");
@@ -73,16 +82,16 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                             <td scope="row" className="px-6 py-4">
                                 {user.title}
                             </td>
-                            <td
-                                scope="row"
-                                className="flex gap-0.5 items-center px-6 py-4">
-                                {user.roles.map((role) => (
-                                    <div
-                                        key={role}
-                                        className="bg-gray-200 px-1 rounded text-gray-700">
-                                        {role}
-                                    </div>
-                                ))}
+                            <td scope="row" className="px-6 py-4">
+                                <div className="flex gap-0.5 items-center">
+                                    {user.roles.map((role) => (
+                                        <div
+                                            key={role}
+                                            className="bg-gray-200 px-1 rounded text-gray-700">
+                                            {role}
+                                        </div>
+                                    ))}
+                                </div>
                             </td>
                             <td scope="row" className="px-6 py-4">
                                 {showRequestedUsers ? (
@@ -90,16 +99,18 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                                         {loading ? (
                                             <Loading2 />
                                         ) : (
-                                            <Button
-                                                style="primary"
-                                                onClick={() =>
-                                                    handleUsersRequest(
-                                                        user._id,
-                                                        user.requestedDivision
-                                                    )
-                                                }>
-                                                Accept
-                                            </Button>
+                                            <>
+                                                <CircleCheck
+                                                    absoluteStrokeWidth
+                                                    onClick={() =>
+                                                        handleUsersRequest(
+                                                            user._id,
+                                                            user.requestedDivision
+                                                        )
+                                                    }
+                                                    className="flex items-center gap-1 hover:cursor-pointer hover:text-blue-600"
+                                                />
+                                            </>
                                         )}
                                     </>
                                 ) : (
@@ -107,7 +118,7 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                                         <Link
                                             to={`/users/${user._id}/credentials?division=${user.division}`}
                                             className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                            <FaKey />
+                                            <Eye absoluteStrokeWidth />
                                         </Link>
 
                                         {currentUser.roles.includes(
@@ -116,7 +127,9 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                                             <Link
                                                 to={`/users/${user._id}/profile?currentUser=false`}
                                                 className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                                <FaUser />
+                                                <Settings2
+                                                    absoluteStrokeWidth
+                                                />
                                             </Link>
                                         )}
                                     </div>
@@ -132,5 +145,5 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
 
 Users.propTypes = {
     users: PropTypes.array,
-    showRequestedUsers: PropTypes.array,
+    showRequestedUsers: PropTypes.bool,
 };

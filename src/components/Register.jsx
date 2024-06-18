@@ -140,7 +140,7 @@ export const Register = ({
                 <form
                     onSubmit={handleSubmit}
                     id="register-form"
-                    className="flex flex-col gap-5 rounded-md bg-gray-100 p-4 md:w-1/3 w-full">
+                    className="grid gap-2 rounded-md bg-white p-4 md:w-1/3 w-full">
                     <Input
                         label="Name"
                         type="text"

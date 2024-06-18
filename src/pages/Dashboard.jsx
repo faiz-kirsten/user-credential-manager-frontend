@@ -6,6 +6,7 @@ import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { Users } from "./Users";
 import { Button } from "../components/Button";
+import { CircleUser, UserMinus, UserPlus } from "lucide-react";
 
 export const Dashboard = () => {
     const storedToken = localStorage.getItem("token");
@@ -66,34 +67,37 @@ export const Dashboard = () => {
                 <Loading loadingMessage="Loading..." />
             ) : error.message === "" ? (
                 <>
-                    <nav className="flex gap-2 mb-4 justify-center">
+                    <nav className="flex gap-2 mb-4 justify-between sm:justify-around items-center">
                         {fetchedDivision.currentUser.roles.includes(
                             "admin"
                         ) && (
-                            <Button
-                                style="primary"
-                                onClick={() =>
-                                    setShowRequestedUsers(
-                                        (prevState) => !prevState
-                                    )
-                                }>
-                                {showRequestedUsers
-                                    ? "Hide Requested"
-                                    : "Show Requested"}
-                            </Button>
+                            <div className="sm:w-60">
+                                <Button
+                                    style="primary"
+                                    onClick={() =>
+                                        setShowRequestedUsers(
+                                            (prevState) => !prevState
+                                        )
+                                    }>
+                                    {showRequestedUsers
+                                        ? "Hide Requested"
+                                        : "Show Requested"}
+                                </Button>
+                            </div>
                         )}
-                        <Button
-                            style="primary"
-                            onClick={() =>
-                                handleShowProfile(
-                                    fetchedDivision.currentUser._id
-                                )
-                            }>
-                            Profile
-                        </Button>
-                        <Button onClick={handleLogout} style="secondary">
-                            Logout
-                        </Button>
+                        <div className="flex items-center">
+                            <CircleUser
+                                onClick={() =>
+                                    handleShowProfile(
+                                        fetchedDivision.currentUser._id
+                                    )
+                                }
+                                className="size-8 hover:cursor-pointer hover:text-blue-600"
+                            />
+                            <Button onClick={handleLogout} style="secondary">
+                                Logout
+                            </Button>
+                        </div>
                     </nav>
                     {fetchedDivision.currentUser.division !== null &&
                     fetchedDivision.currentUser.roles.includes("admin") ? (

@@ -83,7 +83,7 @@ export const Login = ({ handleChangeCurForm }) => {
                 <form
                     onSubmit={handleSubmit}
                     id="login-form"
-                    className="flex flex-col gap-5 rounded-md bg-gray-100 p-4 md:w-1/3 w-full">
+                    className="flex flex-col gap-5 rounded-md  p-4 md:w-1/3 w-full">
                     <Input
                         label="Username"
                         id="username"

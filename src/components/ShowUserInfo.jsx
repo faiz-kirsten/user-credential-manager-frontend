@@ -1,34 +1,36 @@
 export const ShowUserInfo = ({ fetchedUser }) => {
     return (
-        <>
-            <div className="grid gap-1">
+        <div className="grid gap-3">
+            <div className="grid gap-0.5">
                 <span className="text-gray-700">Username: </span>
-                <span className="">{fetchedUser.username}</span>
+                <span className="text-lg">{fetchedUser.username}</span>
             </div>
-            <div className="grid gap-1 text-lg">
+            <div className="grid gap-0.5">
                 <span className="text-gray-700">Name: </span>
-                <span>{fetchedUser.name}</span>
+                <span className="text-lg">{fetchedUser.name}</span>
             </div>
-            <div className="grid gap-1 text-lg">
+            <div className="grid gap-0.5">
                 <span className="text-gray-700">Surname: </span>
-                <span>{fetchedUser.surname}</span>
+                <span className="text-lg">{fetchedUser.surname}</span>
             </div>
-            <div className="grid gap-1 text-lg">
+            <div className="grid gap-0.5">
                 <span className="text-gray-700">Title: </span>
-                <span>{fetchedUser.title}</span>
+                <span className="text-lg">{fetchedUser.title}</span>
             </div>
             {fetchedUser.division !== null ? (
-                <div className="grid gap-1 text-lg">
+                <div className="grid gap-0.5">
                     <span className="text-gray-700">Division: </span>
-                    <span>{fetchedUser.division.name}</span>
+                    <span className="text-lg">{fetchedUser.division.name}</span>
                 </div>
             ) : (
-                <div className="grid gap-1 text-lg">
+                <div className="grid gap-1 ">
                     <span className="text-gray-700">Requested Division: </span>
-                    <span>{fetchedUser.requestedDivision.name}</span>
+                    <span className="text-lg">
+                        {fetchedUser.requestedDivision.name}
+                    </span>
                 </div>
             )}
-            <div className="grid gap-1 text-lg">
+            <div className="grid gap-1 ">
                 <span className="text-gray-700">Role(s): </span>
                 <span className="flex gap-1 text-lg">
                     {fetchedUser.roles.map((role) => (
@@ -40,6 +42,6 @@ export const ShowUserInfo = ({ fetchedUser }) => {
                     ))}
                 </span>
             </div>
-        </>
+        </div>
     );
 };
