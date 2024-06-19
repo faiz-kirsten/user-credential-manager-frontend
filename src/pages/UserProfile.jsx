@@ -143,11 +143,13 @@ export const UserProfile = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // setUpdatingStatus(true);
+        setUpdatingStatus(true);
         const fd = new FormData(event.target);
         const enteredRoles = fd.getAll("roles");
         const formData = Object.fromEntries(fd.entries());
-        formData.roles = ["user", ...enteredRoles];
+        if (isCurrentUser === "false") {
+            formData.roles = ["user", ...enteredRoles];
+        }
         console.log(formData);
         console.log("---");
         console.log(enteredValues);
@@ -218,7 +220,8 @@ export const UserProfile = () => {
     if (afterSubmitMessage.ok === false) messageStyles += " text-red-500 ";
     if (afterSubmitMessage.ok === true) messageStyles += " text-green-500";
 
-    let inputErrorStyles = "w-full h-10 px-2 rounded bg-gray-100";
+    let inputErrorStyles =
+        "w-full h-10 px-2 rounded shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]";
     if (checkIfDivisionWasSelected) {
         inputErrorStyles += " border border-red-500 border-solid";
     }
@@ -229,7 +232,7 @@ export const UserProfile = () => {
             {loading ? (
                 <Loading loadingMessage="Loading..." />
             ) : error.message === "" ? (
-                <div className="flex flex-col gap-2  md:w-1/3 w-full">
+                <div className="flex flex-col gap-2 md:w-1/3 w-full ">
                     <nav className="">
                         <div
                             onClick={handleGoBack}
@@ -241,21 +244,15 @@ export const UserProfile = () => {
                             <span className="text-lg">Go Back</span>
                         </div>
                     </nav>
-                    <div className=" p-4 rounded-md bg-white">
+                    <h1 className="text-2xl mt-3">User Profile Information</h1>
+                    <div
+                        className=" sm:px-5 sm:py-3 px-3 py-2 rounded-md shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]
+                    ">
                         {!isEditing ? (
-                            <div className="">
-                                <ShowUserInfo fetchedUser={fetchedUser} />
-                                <div className="flex md:gap-2 justify-between">
-                                    <div></div>
-                                    <>
-                                        <Button
-                                            style="primary"
-                                            onClick={handleIsEditing}>
-                                            Edit
-                                        </Button>
-                                    </>
-                                </div>
-                            </div>
+                            <ShowUserInfo
+                                fetchedUser={fetchedUser}
+                                handleIsEditing={handleIsEditing}
+                            />
                         ) : (
                             <form
                                 onSubmit={handleSubmit}
@@ -378,36 +375,43 @@ export const UserProfile = () => {
                                                 )}
                                             </div>
                                         </div>
-                                        <fieldset>
-                                            <legend className="text-gray-700">
-                                                Roles
-                                            </legend>
-                                            {currentRoles.map((role) => (
-                                                <div
-                                                    key={role.role}
-                                                    className="flex items-center gap-1">
-                                                    <input
-                                                        type="checkbox"
-                                                        id={role.role}
-                                                        name="roles"
-                                                        value={role.role}
-                                                        defaultChecked={
-                                                            role.set
-                                                        }
-                                                        disabled={
-                                                            role.role === "user"
-                                                        }
-                                                    />
+                                        <div className="grid gap-1.5">
+                                            <label className="text-gray-700">
+                                                Role(s)
+                                            </label>
+                                            <fieldset className="w-full h-10 px-2 flex items-center rounded gap-1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
+                                                {currentRoles.map((role) => (
+                                                    <div
+                                                        key={role.role}
+                                                        className="flex items-center gap-1">
+                                                        <input
+                                                            type="checkbox"
+                                                            id={role.role}
+                                                            name="roles"
+                                                            value={role.role}
+                                                            defaultChecked={
+                                                                role.set
+                                                            }
+                                                            disabled={
+                                                                role.role ===
+                                                                "user"
+                                                            }
+                                                        />
 
-                                                    <label htmlFor={role.role}>
-                                                        {role.role
-                                                            .charAt(0)
-                                                            .toUpperCase() +
-                                                            role.role.slice(1)}
-                                                    </label>
-                                                </div>
-                                            ))}
-                                        </fieldset>
+                                                        <label
+                                                            htmlFor={role.role}>
+                                                            {role.role
+                                                                .charAt(0)
+                                                                .toUpperCase() +
+                                                                role.role.slice(
+                                                                    1
+                                                                )}
+                                                        </label>
+                                                    </div>
+                                                ))}
+                                            </fieldset>
+                                            <div></div>
+                                        </div>
                                     </>
                                 )}
 
@@ -450,24 +454,32 @@ export const UserProfile = () => {
                                     }
                                 />
 
-                                <div className="flex justify-between md:gap-2">
+                                <div className="flex justify-between ">
                                     <div className={messageStyles}>
                                         {afterSubmitMessage.message !== "" ? (
                                             <p>{afterSubmitMessage.message}</p>
                                         ) : undefined}
                                     </div>
-                                    <div className="flex md:gap-2">
+                                    <div className="flex sm:gap-2 gap-1">
                                         {isEditing && (
                                             <>
                                                 <Button
-                                                    style="tertiary"
-                                                    onClick={handleIsEditing}>
+                                                    customStyles="tertiary"
+                                                    onClick={handleIsEditing}
+                                                    type="button">
                                                     Cancel
                                                 </Button>
                                                 {updatingStatus ? (
-                                                    <Loading2 />
+                                                    <Button
+                                                        customStyles="primary"
+                                                        type="submit"
+                                                        disabled>
+                                                        Save
+                                                    </Button>
                                                 ) : (
-                                                    <Button style="primary">
+                                                    <Button
+                                                        customStyles="primary"
+                                                        type="submit">
                                                         Save
                                                     </Button>
                                                 )}

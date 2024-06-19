@@ -3,8 +3,8 @@ import { Outlet, NavLink } from "react-router-dom";
 export default function RootLayout() {
     return (
         <div className="mx-auto px-5 ">
-            <header className="text-center py-5">
-                <h2 className="text-2xl italic">
+            <header className="text-center py-4">
+                <h2 className="text-3xl">
                     Seamlessly manage all employee credentials
                 </h2>
             </header>

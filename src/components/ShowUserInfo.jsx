@@ -1,46 +1,42 @@
-export const ShowUserInfo = ({ fetchedUser }) => {
+import { InputDisplay } from "./InputDisplay";
+import { Button } from "./Button";
+
+export const ShowUserInfo = ({ fetchedUser, handleIsEditing }) => {
     return (
-        <div className="grid gap-3">
-            <div className="grid gap-0.5">
-                <span className="text-gray-700">Username: </span>
-                <span className="text-lg">{fetchedUser.username}</span>
-            </div>
-            <div className="grid gap-0.5">
-                <span className="text-gray-700">Name: </span>
-                <span className="text-lg">{fetchedUser.name}</span>
-            </div>
-            <div className="grid gap-0.5">
-                <span className="text-gray-700">Surname: </span>
-                <span className="text-lg">{fetchedUser.surname}</span>
-            </div>
-            <div className="grid gap-0.5">
-                <span className="text-gray-700">Title: </span>
-                <span className="text-lg">{fetchedUser.title}</span>
-            </div>
+        <div className="grid gap-2">
+            <InputDisplay label="Username" value={fetchedUser.username} />
+            <InputDisplay label="Name" value={fetchedUser.name} />
+            <InputDisplay label="Surname" value={fetchedUser.surname} />
+            <InputDisplay label="Title" value={fetchedUser.title} />
             {fetchedUser.division !== null ? (
-                <div className="grid gap-0.5">
-                    <span className="text-gray-700">Division: </span>
-                    <span className="text-lg">{fetchedUser.division.name}</span>
-                </div>
+                <InputDisplay
+                    label="Division"
+                    value={fetchedUser.division.name}
+                />
             ) : (
-                <div className="grid gap-1 ">
-                    <span className="text-gray-700">Requested Division: </span>
-                    <span className="text-lg">
-                        {fetchedUser.requestedDivision.name}
-                    </span>
-                </div>
+                <InputDisplay
+                    label="Requested Division"
+                    value={fetchedUser.requestedDivision.name}
+                />
             )}
-            <div className="grid gap-1 ">
-                <span className="text-gray-700">Role(s): </span>
-                <span className="flex gap-1 text-lg">
+            <div className="grid gap-1.5">
+                <div className="text-gray-700">Role(s): </div>
+                <div className="w-full h-10 px-2 flex items-center rounded gap-1 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
                     {fetchedUser.roles.map((role) => (
-                        <span
-                            key={role}
-                            className="bg-gray-200 px-1 rounded text-gray-700">
-                            {role}{" "}
+                        <span key={role} className="">
+                            {role.charAt(0).toUpperCase() + role.slice(1)}
                         </span>
                     ))}
-                </span>
+                </div>
+                <div></div>
+            </div>
+            <div className="flex md:gap-2 justify-between">
+                <div className="text-sm flex items-center pl-2"></div>
+                <div>
+                    <Button customStyles="primary" onClick={handleIsEditing}>
+                        Edit
+                    </Button>
+                </div>
             </div>
         </div>
     );

@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
     background-color: #f3f4f6;
-}
+} */
 textarea:focus,
 input:focus,
 select:focus {

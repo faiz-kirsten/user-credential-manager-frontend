@@ -122,25 +122,21 @@ export const Register = ({
     if (afterSubmitMessage.ok === false) messageStyles += " text-red-500 ";
     if (afterSubmitMessage.ok === true) messageStyles += " text-green-500";
 
-    let inputErrorStyles = "w-full h-10 px-2 rounded";
+    let inputErrorStyles =
+        "w-full h-10 px-2 rounded shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]";
     if (checkIfDivisionWasSelected) {
         inputErrorStyles += " border border-red-500 border-solid";
     }
 
-    // code for debugging
-    // function showMessage() {
-    //     console.log(afterSubmitMessage);
-    //     console.log(fetchedUsernames);
-    // }
-
     return (
         <>
-            <h2 className="text-xl text-center mb-3">Create an account</h2>
+            <h2 className="text-2xl text-center mb-2">Create an account</h2>
             <div className="flex justify-center mb-4">
                 <form
                     onSubmit={handleSubmit}
                     id="register-form"
-                    className="grid gap-2 rounded-md bg-white p-4 md:w-1/3 w-full">
+                    className="sm:px-5 sm:py-3 px-3 py-2 grid gap-2 rounded-md md:w-1/3 w-full 
+                    shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                     <Input
                         label="Name"
                         type="text"
@@ -183,7 +179,7 @@ export const Register = ({
                     <div className="grid gap-1.5">
                         <label
                             htmlFor="requestedDivision"
-                            className="text-gray-700">
+                            className="text-gray-600">
                             Request A Division To Join
                         </label>
                         <select
@@ -261,30 +257,10 @@ export const Register = ({
                         </div>
 
                         <div className="flex md:gap-2">
-                            <Button
-                                type="button"
-                                style="tertiary"
-                                onClick={() => {
-                                    document
-                                        .getElementById("register-form")
-                                        .reset();
-                                    setEnteredValues({
-                                        password: "",
-                                        confirmedPassword: "",
-                                        username: "",
-                                    });
-                                    setDidEdit({
-                                        password: "",
-                                        confirmedPassword: "",
-                                        username: "",
-                                    });
-                                }}>
-                                Clear
-                            </Button>
                             {loading ? (
                                 <Loading2 />
                             ) : (
-                                <Button style="primary" type="submit">
+                                <Button customStyles="primary" type="submit">
                                     Sign Up
                                 </Button>
                             )}
@@ -292,12 +268,13 @@ export const Register = ({
                     </div>
                 </form>
             </div>
-            <div className="text-center">
+            <div className="flex justify-center items-center">
+                <span>Already have an account?</span>
                 <Button
                     type="button"
-                    style="secondary"
+                    customStyles="secondary"
                     onClick={() => handleChangeCurForm("login")}>
-                    Already have an account?
+                    Sign In
                 </Button>
             </div>
 

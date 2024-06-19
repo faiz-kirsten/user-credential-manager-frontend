@@ -12,20 +12,43 @@ export const Login = ({ handleChangeCurForm }) => {
         message: "",
         ok: null,
     });
-    const [enteredUsername, setEnteredUsername] = useState(
-        localStorage.getItem("enteredUsername") !== null
-            ? localStorage.getItem("enteredUsername")
-            : ""
-    );
+    // const [enteredUsername, setEnteredUsername] = useState(
+    //     localStorage.getItem("enteredUsername") !== null
+    //         ? localStorage.getItem("enteredUsername")
+    //         : ""
+    // );
+    const [enteredValues, setEnteredValues] = useState({
+        username:
+            localStorage.getItem("enteredUsername") !== null
+                ? localStorage.getItem("enteredUsername")
+                : "",
+        password: "",
+    });
+    const [didEdit, setDidEdit] = useState({
+        username: "",
+        password: "",
+    });
 
-    function resetState() {
-        setTimeout(() => {
-            setAfterSubmitMessage({
-                message: "",
-                ok: null,
-            });
-        }, 2000);
-        setLoggingIn(false);
+    function handleInputBlur(identifier) {
+        setDidEdit((prevEdit) => ({
+            ...prevEdit,
+            [identifier]: true,
+        }));
+    }
+
+    function handleInputChange(identifier, value) {
+        setEnteredValues((prevValues) => ({
+            ...prevValues,
+            [identifier]: value,
+        }));
+        setDidEdit((prevEdit) => ({
+            ...prevEdit,
+            [identifier]: false,
+        }));
+        setAfterSubmitMessage({
+            message: "",
+            ok: null,
+        });
     }
 
     function handleSubmit(e) {
@@ -38,7 +61,7 @@ export const Login = ({ handleChangeCurForm }) => {
                 message: "Enter username & password",
                 ok: false,
             });
-            resetState();
+            setLoggingIn(false);
             return;
         }
 
@@ -47,58 +70,56 @@ export const Login = ({ handleChangeCurForm }) => {
 
             if (!token.ok) {
                 setAfterSubmitMessage({ message: token.message, ok: false });
-                resetState();
+                setLoggingIn(false);
+                return;
             }
-            console.log(token);
-            if (token.ok) {
-                localStorage.setItem("token", token.token);
+            localStorage.setItem("token", token.token);
+            setTimeout(() => {
+                navigate("/dashboard");
                 setAfterSubmitMessage({
-                    message: "Login Successful",
-                    ok: true,
+                    message: "",
+                    ok: null,
                 });
-                setTimeout(() => {
-                    navigate("/dashboard");
-                    setAfterSubmitMessage({
-                        message: "",
-                        ok: null,
-                    });
-                }, 2000);
-            }
-
-            setLoggingIn(false);
+            }, 200);
         }
 
         validateFormInput();
     }
 
-    let messageStyles = "text-sm flex items-center pl-2";
+    let messageStyles = "text-sm flex items-center font-medium";
 
-    if (afterSubmitMessage.ok === false) messageStyles += " text-red-500 ";
-    if (afterSubmitMessage.ok === true) messageStyles += " text-green-500";
+    if (!afterSubmitMessage.ok) messageStyles += " text-red-400 ";
+    if (afterSubmitMessage.ok) messageStyles += " text-green-500";
 
     return (
         <>
-            <h2 className="text-xl text-center mb-3">Welcome back</h2>
+            <h2 className="text-2xl text-center mb-2">Login into account</h2>
             <div className="flex justify-center mb-4">
                 <form
                     onSubmit={handleSubmit}
                     id="login-form"
-                    className="flex flex-col gap-5 rounded-md  p-4 md:w-1/3 w-full">
+                    className="sm:px-5 sm:py-3 px-3 py-2 marker:grid gap-2 rounded-md md:w-1/3 w-full 
+                    shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
                     <Input
                         label="Username"
                         id="username"
                         type="text"
                         name="username"
-                        value={enteredUsername}
-                        onChange={(e) => {
-                            setEnteredUsername(e.target.value);
-                        }}
+                        value={enteredValues.username}
+                        onChange={(event) =>
+                            handleInputChange("username", event.target.value)
+                        }
+                        onBlur={() => handleInputBlur("username")}
                     />
                     <Input
                         label="Password"
                         id="password"
                         type="password"
                         name="password"
+                        onChange={(event) =>
+                            handleInputChange("password", event.target.value)
+                        }
+                        onBlur={() => handleInputBlur("password")}
                     />
                     <div className="flex justify-between md:gap-2">
                         <div className={messageStyles}>
@@ -108,21 +129,15 @@ export const Login = ({ handleChangeCurForm }) => {
                         </div>
 
                         <div className="flex md:gap-2">
-                            <Button
-                                style="tertiary"
-                                type="button"
-                                onClick={() => {
-                                    document
-                                        .getElementById("login-form")
-                                        .reset();
-                                    setEnteredUsername("");
-                                }}>
-                                Clear
-                            </Button>
                             {loggingIn ? (
-                                <Loading2 />
+                                <Button
+                                    customStyles="primary"
+                                    type="submit"
+                                    disabled>
+                                    Sign In
+                                </Button>
                             ) : (
-                                <Button style="primary" type="submit">
+                                <Button customStyles="primary" type="submit">
                                     Sign In
                                 </Button>
                             )}
@@ -130,12 +145,13 @@ export const Login = ({ handleChangeCurForm }) => {
                     </div>
                 </form>
             </div>
-            <div className="text-center">
+            <div className="flex justify-center items-center">
+                <span>Don&apos;t have an account?</span>
                 <Button
-                    style="secondary"
+                    customStyles="secondary"
                     type="button"
                     onClick={() => handleChangeCurForm("register")}>
-                    Don&apos;t have an account?
+                    Sign Up
                 </Button>
             </div>
         </>

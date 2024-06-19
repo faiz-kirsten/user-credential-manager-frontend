@@ -6,7 +6,7 @@ import { Error } from "../components/Error";
 import { Button } from "../components/Button";
 import { handleFetchUserCredentials } from "../utils/http";
 import { CredentialsTable } from "../components/CredentialsTable";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CircleUser, UserCog } from "lucide-react";
 
 export const Credentials = () => {
     const storedToken = localStorage.getItem("token");
@@ -70,18 +70,17 @@ export const Credentials = () => {
                     {isHome ? (
                         <>
                             <nav className="flex gap-2 mb-4 justify-center">
-                                <Button
-                                    style="primary"
+                                <CircleUser
                                     onClick={() =>
                                         handleShowProfile(
                                             fetchedCredentials.currentUser._id
                                         )
-                                    }>
-                                    Profile
-                                </Button>
+                                    }
+                                    className="size-8 hover:cursor-pointer hover:text-blue-600"
+                                />
                                 <Button
                                     onClick={handleLogout}
-                                    style="secondary">
+                                    customStyles="secondary">
                                     Logout
                                 </Button>
                             </nav>

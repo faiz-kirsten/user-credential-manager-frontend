@@ -12,8 +12,10 @@ import {
     CircleCheck,
     CircleUser,
     Eye,
+    KeyRound,
     Settings2,
     UserCheck,
+    UserCog,
     Vault,
 } from "lucide-react";
 
@@ -43,24 +45,24 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-ss-lg">
             <table className="w-full text-sm text-left text-gray-500 ">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-200">
+                <thead className="text-sm text-gray-700 uppercase bg-blue-100">
                     <tr scope="col" className="">
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-4 py-3">
                             Username
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-4 py-3">
                             Name
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-4 py-3">
                             Surname
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-4 py-3">
                             Title
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-4 py-3">
                             Roles
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-4 py-3">
                             Operations
                         </th>
                     </tr>
@@ -70,30 +72,31 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                         <tr key={user.username} className="bg-white border-b">
                             <td
                                 scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                                 {user.username}
                             </td>
-                            <td scope="row" className="px-6 py-4">
+                            <td scope="row" className="px-4 py-3">
                                 {user.name}
                             </td>
-                            <td scope="row" className="px-6 py-4">
+                            <td scope="row" className="px-4 py-3">
                                 {user.surname}
                             </td>
-                            <td scope="row" className="px-6 py-4">
+                            <td scope="row" className="px-4 py-3">
                                 {user.title}
                             </td>
-                            <td scope="row" className="px-6 py-4">
+                            <td scope="row" className="px-4 py-3">
                                 <div className="flex gap-0.5 items-center">
                                     {user.roles.map((role) => (
                                         <div
                                             key={role}
                                             className="bg-gray-200 px-1 rounded text-gray-700">
-                                            {role}
+                                            {role.charAt(0).toUpperCase() +
+                                                role.slice(1)}
                                         </div>
                                     ))}
                                 </div>
                             </td>
-                            <td scope="row" className="px-6 py-4">
+                            <td scope="row" className="px-4 py-3">
                                 {showRequestedUsers ? (
                                     <>
                                         {loading ? (
@@ -118,7 +121,7 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                                         <Link
                                             to={`/users/${user._id}/credentials?division=${user.division}`}
                                             className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                            <Eye absoluteStrokeWidth />
+                                            <KeyRound absoluteStrokeWidth />
                                         </Link>
 
                                         {currentUser.roles.includes(
@@ -127,9 +130,7 @@ export const Users = ({ users, showRequestedUsers, currentUser }) => {
                                             <Link
                                                 to={`/users/${user._id}/profile?currentUser=false`}
                                                 className="underline underline-offset-4  hover:text-blue-600 bg-white text-gray-700">
-                                                <Settings2
-                                                    absoluteStrokeWidth
-                                                />
+                                                <UserCog absoluteStrokeWidth />
                                             </Link>
                                         )}
                                     </div>

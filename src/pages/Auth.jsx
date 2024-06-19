@@ -68,8 +68,6 @@ export default function Auth() {
                             fetchedDivisions={fetchedDivisions}
                         />
                     )}
-                    {/* Code for debugging */}
-                    {/* <button onClick={showUsers}>Show Usernames</button> */}
                 </>
             ) : (
                 <Error>{error.message}</Error>

@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import { Dashboard } from "./pages/Dashboard";
 import { UserProfile } from "./pages/UserProfile";
 import { Credentials } from "./pages/Credentials";
+import { NotFound } from "./pages/NotFound";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/users/:id/profile" element={<UserProfile />} />
             <Route path="/users/:id/credentials" element={<Credentials />} />
+            <Route path="*" element={<NotFound />} />
         </Route>
     )
 );

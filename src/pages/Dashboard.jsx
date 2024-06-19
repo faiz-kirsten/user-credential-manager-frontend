@@ -73,7 +73,7 @@ export const Dashboard = () => {
                         ) && (
                             <div className="sm:w-60">
                                 <Button
-                                    style="primary"
+                                    customStyles="primary"
                                     onClick={() =>
                                         setShowRequestedUsers(
                                             (prevState) => !prevState
@@ -94,7 +94,9 @@ export const Dashboard = () => {
                                 }
                                 className="size-8 hover:cursor-pointer hover:text-blue-600"
                             />
-                            <Button onClick={handleLogout} style="secondary">
+                            <Button
+                                onClick={handleLogout}
+                                customStyles="secondary">
                                 Logout
                             </Button>
                         </div>
