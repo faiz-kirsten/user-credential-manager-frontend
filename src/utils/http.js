@@ -26,6 +26,7 @@ export const validateUser = async (formData) => {
     if (!response.ok) {
         return { message: "Invalid username or password!", ok: false };
     }
+
     const resData = await response.json();
 
     return { token: resData.token, ok: true };
